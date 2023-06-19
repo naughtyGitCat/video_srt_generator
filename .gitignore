@@ -1,0 +1,6 @@
+.idea
+*.py~
+*.un~
+__pycache__
+.vs
+.vscode
