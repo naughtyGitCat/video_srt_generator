@@ -25,7 +25,7 @@ def video2audio(video_file: str) -> str:
     print(f'[DEBUG]audio_file {audio_file}')
     p = subprocess.Popen([FFMPEG, "-i", video_file,
                           "-f", "wav", "-vn", "-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1",
-                          "-ss", "00:00:00", "-to", "00:01:10",  # for test, only convert the header fragment audio
+                          # "-ss", "00:00:00", "-to", "00:01:10",  # for test, only convert the header fragment audio
                           "-y", audio_file],
                          stdout=subprocess.PIPE, encoding="utf-8")
     while True:
