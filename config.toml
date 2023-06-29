@@ -7,6 +7,7 @@ size = 8  # mb
 path = ""
 type = "smb"  # smb,local
 suffixes = ["mp4", "mkv", "avi", "wmv"]
+search_recursive = true
 # if smb:
 smb_user = ""
 smb_password = ""
