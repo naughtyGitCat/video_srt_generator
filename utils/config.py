@@ -112,4 +112,4 @@ class Config:
                       Srt=srt_config, Log=log_config)
 
 
-CONFIG: typing.Optional[Config] = None
+CONFIG: typing.Optional[Config] = Config()
