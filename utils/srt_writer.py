@@ -1,14 +1,11 @@
 # 20230619
 # copy from whisper.utils, with some translate and smb modifies
-import json
 import os
 import sys
 import time
-import zlib
-from typing import Callable, TextIO
+from typing import TextIO
 
-import config
-from utils import translator
+from utils import translator, config
 
 system_encoding = sys.getdefaultencoding()
 
