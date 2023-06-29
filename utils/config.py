@@ -66,36 +66,39 @@ class Config1:
     Log: Log
 
 
-CONFIG: typing.Optional[Config1] = None
-
-
 def init_config():
     config = pathlib.Path().absolute().joinpath("config.toml")
     with open(config, "rb") as f:
         data = tomllib.load(f)
-    CONFIG.Log = Log(level=logging.DEBUG, count=0, size=0)
-    CONFIG.Log.size = data['log']['size'] * 1024 * 1024  # bytes to MB
-    CONFIG.Log.count = data['log']['count']
+    log_config = Log(level=logging.DEBUG, count=0, size=0)
+    log_config.size = data['log']['size'] * 1024 * 1024  # bytes to MB
+    log_config.count = data['log']['count']
     if data['log']['level'] == "info":
-        CONFIG.Log.level = logging.INFO
+        log_config.level = logging.INFO
     if data['log']['level'] == "warn":
-        CONFIG.Log.level = logging.WARN
+        log_config.level = logging.WARN
     if data['log']['level'] == "error":
-        CONFIG.Log.level = logging.ERROR
+        log_config.level = logging.ERROR
 
-    CONFIG.Targets = list()
+    targets: list[Target] = list()
     for t in data['log']['targets']:
-        CONFIG.Targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
-                                     smb_user=t['smb_user'], smb_password=t['smb_password'],
-                                     search_recursive=t['search_recursive']))
+        targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
+                              smb_user=t['smb_user'], smb_password=t['smb_password'],
+                              search_recursive=t['search_recursive']))
 
-    CONFIG.FFmpeg = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
+    ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
 
-    CONFIG.Whisper = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
+    whisper_config = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
                              model_device=data['whisper']['model_device'])
 
-    CONFIG.Translate = Translate(enable=data['translate']['enable'],
+    translate_config = Translate(enable=data['translate']['enable'],
                                  target_language=data['translate']['target_language'],
                                  api=data['translate']['api'], fail_hint=data['translate']['fail_hint'])
 
-    CONFIG.Srt = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
+    srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
+
+    return Config1(Targets=targets, FFmpeg=ffmpeg_config, Whisper=whisper_config, Translate=translate_config,
+                   Srt=srt_config, Log=log_config)
+
+
+CONFIG: typing.Optional[Config1] = None
