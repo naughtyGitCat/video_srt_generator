@@ -6,8 +6,8 @@ import time
 from typing import TextIO
 
 from utils import translator
-from utils.config import CONFIG
-from utils.logger import get_logger
+from utils import CONFIG
+from utils import get_logger
 
 logger = get_logger("srt")
 
