@@ -81,7 +81,7 @@ def init_config():
         log_config.level = logging.ERROR
 
     targets: list[Target] = list()
-    for t in data['log']['targets']:
+    for t in data['targets']:
         targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
                               smb_user=t['smb_user'], smb_password=t['smb_password'],
                               search_recursive=t['search_recursive']))
