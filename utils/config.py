@@ -1,4 +1,5 @@
 # 20230618
+import pathlib
 import tomllib
 import dataclasses
 import logging
@@ -69,7 +70,8 @@ CONFIG: typing.Optional[Config1] = None
 
 
 def init_config():
-    with open("../config.toml", "rb") as f:
+    config = pathlib.Path().absolute().joinpath("config.toml")
+    with open(config, "rb") as f:
         data = tomllib.load(f)
     CONFIG.Log = Log(level=logging.DEBUG, count=0, size=0)
     CONFIG.Log.size = data['log']['size'] * 1024 * 1024  # bytes to MB
