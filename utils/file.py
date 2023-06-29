@@ -1,6 +1,7 @@
 # 20230618
 import os
 import typing
+import pathlib
 from utils import config
 import smbclient
 import platform
@@ -14,6 +15,7 @@ def get_file_name(path: str) -> str:
     else:
         return pathlib.Path(path).name
 
+
 def get_path_parent(path: str) -> str:
     """optimized for smb/local file"""
     if platform.system() != 'Windows' and path.startswith("\\\\"):
@@ -22,12 +24,14 @@ def get_path_parent(path: str) -> str:
     else:
         return pathlib.Path(path).parent
 
+
 def join_path(seg1: str, seg2: str) -> str: 
     """optimized for smb/local file"""
     if platform.system() != 'Windows' and seg1.startswith("\\\\"):
         return f"{seg1}\{seg2}"
     else:
         return os.path.join(seg1, seg2)
+
 
 def smb_login() -> None:
     if config.Config.media_smb_user != "":
