@@ -56,44 +56,10 @@ class Config:
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            print('Creating the object')
-            config = pathlib.Path().absolute().joinpath("config.toml")
-            with open(config, "rb") as f:
-                data = tomllib.load(f)
-            log_config = Log(level=logging.DEBUG, count=0, size=0)
-            log_config.size = data['log']['size'] * 1024 * 1024  # bytes to MB
-            log_config.count = data['log']['count']
-            if data['log']['level'] == "info":
-                log_config.level = logging.INFO
-            if data['log']['level'] == "warn":
-                log_config.level = logging.WARN
-            if data['log']['level'] == "error":
-                log_config.level = logging.ERROR
-
-            targets: list[Target] = list()
-            for t in data['targets']:
-                targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
-                                      smb_user=t['smb_user'], smb_password=t['smb_password'],
-                                      search_recursive=t['search_recursive']))
-
-            ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
-
-            whisper_config = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
-                                     model_device=data['whisper']['model_device'])
-
-            translate_config = Translate(enable=data['translate']['enable'],
-                                         target_language=data['translate']['target_language'],
-                                         api=data['translate']['api'], fail_hint=data['translate']['fail_hint'])
-
-            srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
-            cls._instance = Config(Targets=targets, FFmpeg=ffmpeg_config,
-                                   Whisper=whisper_config,
-                                   Translate=translate_config,
-                                   Srt=srt_config, Log=log_config)
-            # Put any initialization here.
+            print('parsing the config file')
+            cls.init_config()
         return cls._instance
 
-    # media_path = r"\\B350m\e\电影\纪录片\国家地理.伟大工程巡礼系列National.Geographic.Megastructures.720p.HDTV"
     Targets: list[Target]
 
     FFmpeg: typing.Optional[FFmpeg]
@@ -107,7 +73,7 @@ class Config:
     Log: typing.Optional[Log]
 
     @classmethod
-    def init_config(cls) -> typing.Self:
+    def init_config(cls):
         config = pathlib.Path().absolute().joinpath("config.toml")
         with open(config, "rb") as f:
             data = tomllib.load(f)
@@ -138,10 +104,12 @@ class Config:
 
         srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
 
-        return Config(Targets=targets, FFmpeg=ffmpeg_config,
-                      Whisper=whisper_config,
-                      Translate=translate_config,
-                      Srt=srt_config, Log=log_config)
+        cls.Log = log_config
+        cls.Targets = targets
+        cls.FFmpeg = ffmpeg_config
+        cls.Whisper = whisper_config
+        cls.Translate = translate_config
+        cls.Srt = srt_config
 
 
 CONFIG: typing.Optional[Config] = Config()
