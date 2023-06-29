@@ -1,3 +1,8 @@
+[log]
+level = "debug"
+count = 8
+size = 8  # mb
+
 [[targets]]
 path = ""
 type = "smb"  # smb,local
@@ -21,7 +26,7 @@ model_device = ""  # cuda,cpu,""  use "" to let whisper auto choose cuda or cpu
 enable = true  # true,false
 target_language = "zh"
 api = ["google", "bing", "Sogou", "Baidu", "Iflytek"]  # https://github.com/UlionTse/translators
-fail_action = ""  # "","translation failed"
+fail_hint = ""  # "","translation failed"
 
 [srt]
 overwrite = true  # true,false overwrite the existence srt
