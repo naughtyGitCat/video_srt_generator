@@ -21,7 +21,7 @@ if __name__ == '__main__':
     init_config()
     logger.info('get files')
     for target in CONFIG.Targets:
-        files = get_files(target.path, target.search_recursive)
+        files = get_files(target)
         model: whisper.Whisper
         model_loaded: bool = False
         for video_file in files:
