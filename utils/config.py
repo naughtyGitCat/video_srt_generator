@@ -2,6 +2,7 @@
 import tomllib
 import dataclasses
 import logging
+import typing
 
 
 @dataclasses.dataclass
@@ -64,7 +65,7 @@ class Config1:
     Log: Log
 
 
-CONFIG: Config1
+CONFIG: typing.Optional[Config1] = None
 
 
 def init_config():
