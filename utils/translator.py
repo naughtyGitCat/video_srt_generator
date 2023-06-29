@@ -1,14 +1,14 @@
 # 20230619
 import traceback
 import translators
-from utils import config
+from utils.config import CONFIG
 
 
-def translate(line: str, source_lang: str = 'auto', target_lang: str = config.Config.translate_to) -> str:
-    result = config.Config.translate_fail_action
+def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Translate.target_language) -> str:
+    result = CONFIG.Translate.fail_hint
     try:
         result = translators.translate_text(line,
-                                            translator=config.Config.translate_api[0],
+                                            translator=CONFIG.Translate.api,
                                             from_language=source_lang,
                                             to_language=target_lang)
         if isinstance(result, str):
