@@ -5,7 +5,7 @@ import pathlib
 import whisper
 from utils.file import get_files
 from utils import srt_writer, video2audio, transcriber
-from utils import CONFIG, init_config
+from utils import CONFIG
 from utils import get_logger
 
 logger = get_logger("main")
@@ -18,7 +18,6 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    init_config()
     logger.info('get files')
     for target in CONFIG.Targets:
         files = get_files(target)
