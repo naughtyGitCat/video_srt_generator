@@ -13,8 +13,8 @@ smb_user = ""
 smb_password = ""
 
 [ffmpeg]
-binary = ""            # full path
-audio_tmp = ""
+binary_path = ""            # full path
+tmp_path = ""
 
 [whisper]
 # for more detail, please read github.com/openai/whisper/__init__.py,transcribe.py
