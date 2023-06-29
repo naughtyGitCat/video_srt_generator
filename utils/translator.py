@@ -1,11 +1,12 @@
 # 20230619
 import traceback
 import translators
-from utils.config import CONFIG
+
+from utils import config
 
 
 def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Translate.target_language) -> str:
-    result = CONFIG.Translate.fail_hint
+    result = config.CONFIG.Translate.fail_hint
     try:
         result = translators.translate_text(line,
                                             translator=CONFIG.Translate.api,
