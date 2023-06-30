@@ -53,14 +53,6 @@ class Srt:
 class Config:
     _instance: typing.Optional[typing.Self] = dataclasses.field(init=False, repr=False)
 
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            print('parsing the config file')
-            cls._instance = super(Config, cls).__new__(cls, *args, **kwargs)
-            cls.init_config()
-            print(cls)
-        return cls._instance
-
     Targets: list[Target]
 
     FFmpeg: typing.Optional[FFmpeg]
@@ -75,43 +67,51 @@ class Config:
 
     @classmethod
     def init_config(cls):
-        config = pathlib.Path().absolute().joinpath("config.toml")
-        with open(config, "rb") as f:
-            data = tomllib.load(f)
-        log_config = Log(level=logging.DEBUG, count=0, size=0)
-        log_config.size = data['log']['size'] * 1024 * 1024  # bytes to MB
-        log_config.count = data['log']['count']
-        if data['log']['level'] == "info":
-            log_config.level = logging.INFO
-        if data['log']['level'] == "warn":
-            log_config.level = logging.WARN
-        if data['log']['level'] == "error":
-            log_config.level = logging.ERROR
+        if not cls._instance:
+            config = pathlib.Path().absolute().joinpath("config.toml")
+            with open(config, "rb") as f:
+                data = tomllib.load(f)
+            log_config = Log(level=logging.DEBUG, count=0, size=0)
+            log_config.size = data['log']['size'] * 1024 * 1024  # bytes to MB
+            log_config.count = data['log']['count']
+            if data['log']['level'] == "info":
+                log_config.level = logging.INFO
+            if data['log']['level'] == "warn":
+                log_config.level = logging.WARN
+            if data['log']['level'] == "error":
+                log_config.level = logging.ERROR
 
-        targets: list[Target] = list()
-        for t in data['targets']:
-            targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
-                                  smb_user=t['smb_user'], smb_password=t['smb_password'],
-                                  search_recursive=t['search_recursive']))
+            targets: list[Target] = list()
+            for t in data['targets']:
+                targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
+                                      smb_user=t['smb_user'], smb_password=t['smb_password'],
+                                      search_recursive=t['search_recursive']))
 
-        ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
+            ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
 
-        whisper_config = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
-                                 model_device=data['whisper']['model_device'])
+            whisper_config = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
+                                     model_device=data['whisper']['model_device'])
 
-        translate_config = Translate(enable=data['translate']['enable'],
-                                     target_language=data['translate']['target_language'],
-                                     api=data['translate']['api'], fail_hint=data['translate']['fail_hint'])
+            translate_config = Translate(enable=data['translate']['enable'],
+                                         target_language=data['translate']['target_language'],
+                                         api=data['translate']['api'], fail_hint=data['translate']['fail_hint'])
 
-        srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
+            srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
 
-        cls.Log = log_config
-        cls.Targets = targets
-        cls.FFmpeg = ffmpeg_config
-        cls.Whisper = whisper_config
-        cls.Translate = translate_config
-        cls.Srt = srt_config
-        return cls()
+            cls._instance = Config(Targets=targets,
+                                   FFmpeg=ffmpeg_config,
+                                   Whisper=whisper_config,
+                                   Translate=translate_config,
+                                   Srt=srt_config,
+                                   Log=log_config)
+            return cls._instance
+            # cls.Log = log_config
+            # cls.Targets = targets
+            # cls.FFmpeg = ffmpeg_config
+            # cls.Whisper = whisper_config
+            # cls.Translate = translate_config
+            # cls.Srt = srt_config
+            # return cls()
 
 
 CONFIG: typing.Optional[Config] = Config()
