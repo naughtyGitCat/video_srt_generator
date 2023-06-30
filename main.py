@@ -3,7 +3,7 @@ import logging
 import pathlib
 
 import whisper
-from utils import CONFIG, get_files, get_logger, have_srt_file
+from utils import CONFIG, get_files, get_logger, have_srt_file, remove_file
 from utils import srt_writer, video2audio, transcriber
 
 logger = get_logger("main")
@@ -48,4 +48,7 @@ if __name__ == '__main__':
                 logger.info(f'srt file path: {srt_path}')
                 logger.info(f'srt file for {video_file} generated')
                 te = datetime.datetime.now()
-                logger.debug(f"[DEBUG] transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
+                logger.debug(f"transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
+                logger.info(f"now delete tmp audio file {audio_file}")
+                remove_file(audio_file)
+
