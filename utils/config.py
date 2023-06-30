@@ -66,8 +66,8 @@ class Config:
     Log: typing.Optional[Log]
 
     @classmethod
-    def init_config(cls):
-        if not cls._instance:
+    def init_config(cls) -> typing.Self:
+        if cls._instance is None:
             config = pathlib.Path().absolute().joinpath("config.toml")
             with open(config, "rb") as f:
                 data = tomllib.load(f)
@@ -105,13 +105,6 @@ class Config:
                                    Srt=srt_config,
                                    Log=log_config)
             return cls._instance
-            # cls.Log = log_config
-            # cls.Targets = targets
-            # cls.FFmpeg = ffmpeg_config
-            # cls.Whisper = whisper_config
-            # cls.Translate = translate_config
-            # cls.Srt = srt_config
-            # return cls()
 
 
 CONFIG: typing.Optional[Config] = Config.init_config()
