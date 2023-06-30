@@ -3,7 +3,24 @@ transcribe video srt and translate to custom language
 根据视频中的对话生成srt字幕,并且按需翻译成指定语言
 
 ## run 运行
-*only test on windows11 + python3.11 + local/smb media*
+
+### config 配置
+please customize you setting in `config.toml`
+请在`config.toml`中进行自定义设置
+
+### linux
+*tested on debian12 + python3.11 + (smb mounted as cifs) media*
+
+**please mount smb share by cifs as a local path, and add the mounted path as `local` in `config.toml`**
+请将smb共享挂载到linux的目录上, 在配置文件中以local的类型设置
+
+### windows
+*tested on windows11 + python3.11 + local/smb media*
+
+**please provide the smb share user/pass in `config.toml` if the user/pass is not stored in windows,**
+**or  is running in remote pwsh connection， even if the share user/pass is set/stored in gui**
+如果系统中没有保存文件的共享账户密码,请在配置文件中提供。如果时同pwsh远程连接执行的本脚本，虽然系统已经保存了共享账户密码，但仍需要在配置文件中提供
+
 ```bash
 git clone https://github.com/naughtyGitCat/video_srt_generator
 cd video_srt_generator
@@ -15,8 +32,8 @@ python main.py
 ## requirements 依赖
 
 ### python3
-```commandline
-python --version >= 3.8
+```
+python --version >= 3.11
 ```
 
 ### ffmpeg
