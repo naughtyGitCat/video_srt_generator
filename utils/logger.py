@@ -39,12 +39,14 @@ def get_logger(name) -> logging.Logger:
     fh.setLevel(CONFIG.Log.level)
     efh.setLevel(logging.WARN)
     # 格式
-    formatter = coloredlogs.ColoredFormatter(
+    color_formatter = coloredlogs.ColoredFormatter(
         '%(asctime)s - %(module)-8s - %(funcName)-14s[line:%(lineno)3d] - %(levelname)-8s: %(message)s')
 
-    ch.setFormatter(formatter)
-    fh.setFormatter(formatter)
-    efh.setFormatter(formatter)
+    bare_formatter = logging.Formatter(
+        '%(asctime)s - %(module)-8s - %(funcName)-14s[line:%(lineno)3d] - %(levelname)-8s: %(message)s')
+    ch.setFormatter(color_formatter)
+    fh.setFormatter(bare_formatter)
+    efh.setFormatter(bare_formatter)
     logger.addHandler(ch)
     logger.addHandler(fh)
     logger.addHandler(efh)
