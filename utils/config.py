@@ -104,12 +104,12 @@ class Config:
 
         srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
 
-        cls.Log = log_config
-        cls.Targets = targets
-        cls.FFmpeg = ffmpeg_config
-        cls.Whisper = whisper_config
-        cls.Translate = translate_config
-        cls.Srt = srt_config
+        cls._instance.Log = log_config
+        cls._instance.Targets = targets
+        cls._instance.FFmpeg = ffmpeg_config
+        cls._instance.Whisper = whisper_config
+        cls._instance.Translate = translate_config
+        cls._instance.Srt = srt_config
 
 
 CONFIG: typing.Optional[Config] = Config()
