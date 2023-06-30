@@ -5,6 +5,7 @@ import dataclasses
 import logging
 import typing
 
+
 @dataclasses.dataclass
 class Log:
     level: int
@@ -67,7 +68,7 @@ class Config:
 
     @classmethod
     def init_config(cls) -> typing.Self:
-        if cls._instance is None:
+        if not hasattr(cls, "_instance") or cls._instance is None:
             config = pathlib.Path().absolute().joinpath("config.toml")
             with open(config, "rb") as f:
                 data = tomllib.load(f)
@@ -91,6 +92,9 @@ class Config:
 
             whisper_config = Whisper(model_path=data['whisper']['model_path'], model_name=data['whisper']['model_name'],
                                      model_device=data['whisper']['model_device'])
+
+            if whisper_config.model_device not in ['cuda', 'cpu']:
+                whisper_config.model_device = None
 
             translate_config = Translate(enable=data['translate']['enable'],
                                          target_language=data['translate']['target_language'],
