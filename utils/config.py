@@ -57,7 +57,7 @@ class Config:
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             print('parsing the config file')
-            cls.init_config()
+            _instance = cls.init_config()
         return cls._instance
 
     Targets: list[Target]
@@ -104,12 +104,13 @@ class Config:
 
         srt_config = Srt(overwrite=data['srt']['overwrite'], bilingual=data['srt']['bilingual'])
 
-        cls._instance.Log = log_config
-        cls._instance.Targets = targets
-        cls._instance.FFmpeg = ffmpeg_config
-        cls._instance.Whisper = whisper_config
-        cls._instance.Translate = translate_config
-        cls._instance.Srt = srt_config
+        cls.Log = log_config
+        cls.Targets = targets
+        cls.FFmpeg = ffmpeg_config
+        cls.Whisper = whisper_config
+        cls.Translate = translate_config
+        cls.Srt = srt_config
+        return cls
 
 
 CONFIG: typing.Optional[Config] = Config()
