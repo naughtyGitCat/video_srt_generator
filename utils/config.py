@@ -57,7 +57,8 @@ class Config:
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             print('parsing the config file')
-            _instance = cls.init_config()
+            cls._instance = super(Config, cls).__new__(cls, *args, **kwargs)
+            print(cls)
         return cls._instance
 
     Targets: list[Target]
