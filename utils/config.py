@@ -58,6 +58,7 @@ class Config:
         if cls._instance is None:
             print('parsing the config file')
             cls._instance = super(Config, cls).__new__(cls, *args, **kwargs)
+            cls.init_config()
             print(cls)
         return cls._instance
 
