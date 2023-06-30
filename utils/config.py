@@ -5,7 +5,6 @@ import dataclasses
 import logging
 import typing
 
-
 @dataclasses.dataclass
 class Log:
     level: int
@@ -52,7 +51,7 @@ class Srt:
 
 @dataclasses.dataclass(frozen=True)
 class Config:
-    _instance = None
+    _instance: typing.Optional[typing.Self] = dataclasses.field(init=False, repr=False)
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -112,7 +111,7 @@ class Config:
         cls.Whisper = whisper_config
         cls.Translate = translate_config
         cls.Srt = srt_config
-        return cls
+        return cls()
 
 
 CONFIG: typing.Optional[Config] = Config()
