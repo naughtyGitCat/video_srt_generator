@@ -9,7 +9,7 @@ def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Tr
     result = CONFIG.Translate.fail_hint
     try:
         result = translators.translate_text(line,
-                                            translator=CONFIG.Translate.api,
+                                            translator=CONFIG.Translate.api[0],
                                             from_language=source_lang,
                                             to_language=target_lang)
         if isinstance(result, str):
