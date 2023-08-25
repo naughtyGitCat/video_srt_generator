@@ -10,7 +10,9 @@ please customize you setting in `config.toml`
 
 ### linux
 *tested on debian12 + python3.11 + (smb mounted as cifs) media*
-
+```sh
+apt install nvidia-cudnn
+```
 **please mount smb share by cifs as a local path, and add the mounted path as `local` in `config.toml`**
 
 请将smb共享挂载到linux的目录上, 在配置文件中以local的类型设置
