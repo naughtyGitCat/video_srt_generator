@@ -79,3 +79,4 @@ during cut a 1min10s video and transcribe to audio
 * https://github.com/openai/whisper
 * https://www.spapas.net/2023/05/22/ai-auto-subtitling/
 * https://github.com/ggerganov/whisper.cpp
+* https://stackoverflow.com/questions/66977227/could-not-load-dynamic-library-libcudnn-so-8-when-running-tensorflow-on-ubun
