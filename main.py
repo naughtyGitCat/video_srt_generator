@@ -2,7 +2,7 @@ import datetime
 import logging
 import pathlib
 
-import whisper
+import faster_whisper
 from utils import CONFIG, get_files, get_logger, have_srt_file, remove_file
 from utils import srt_writer, video2audio, transcriber
 
@@ -19,16 +19,17 @@ if __name__ == '__main__':
     logger.info('get files')
     for target in CONFIG.Targets:
         files = get_files(target)
-        model: whisper.Whisper
+        model: faster_whisper.WhisperModel
         model_loaded: bool = False
         for video_file in files:
             # if not have srt file, or configured to overwrite
             if not have_srt_file(video_file) or CONFIG.Srt.overwrite:
                 if not model_loaded:
                     logger.info('load model')
-                    model = whisper.load_model(name=CONFIG.Whisper.model_name,
-                                               device=CONFIG.Whisper.model_device,
-                                               download_root=CONFIG.Whisper.model_path)
+                    model = faster_whisper.WhisperModel(name=CONFIG.Whisper.model_name,
+                                                        device=CONFIG.Whisper.model_device,
+                                                        compute_type="int8_float16",
+                                                        download_root=CONFIG.Whisper.model_path)
                     model_loaded = True
                 logger.info(f'do file: {video_file}')
                 audio_file = video2audio.video2audio(video_file)
@@ -38,10 +39,12 @@ if __name__ == '__main__':
 
                 writer = srt_writer.SRTWriter(srt_path)
                 ts = datetime.datetime.now()
-                segments = transcriber.transcribe_to_segments(model,
-                                                              audio_file,
-                                                              language=None,
-                                                              verbose=CONFIG.Log.level == logging.DEBUG)
+                # segments = transcriber.transcribe_to_segments(model,
+                #                                               audio_file,
+                #                                               language=None,
+                #                                               verbose=CONFIG.Log.level == logging.DEBUG)
+                segments, info = model.transcribe(audio_file)
+                logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
                 for segment in segments:
                     writer.segment_to_srt1(segment)
 
