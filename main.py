@@ -26,9 +26,9 @@ if __name__ == '__main__':
             if not have_srt_file(video_file) or CONFIG.Srt.overwrite:
                 if not model_loaded:
                     logger.info('load model')
-                    model = faster_whisper.WhisperModel(name=CONFIG.Whisper.model_name,
+                    model = faster_whisper.WhisperModel(CONFIG.Whisper.model_name,
                                                         device=CONFIG.Whisper.model_device,
-                                                        compute_type="int8_float16",
+                                                        compute_type="int8",
                                                         download_root=CONFIG.Whisper.model_path)
                     model_loaded = True
                 logger.info(f'do file: {video_file}')
@@ -46,6 +46,7 @@ if __name__ == '__main__':
                 segments, info = model.transcribe(audio_file)
                 logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
                 for segment in segments:
+                    logger.debug(f"segment: {segment}")
                     writer.segment_to_srt1(segment)
 
                 logger.info(f'srt file path: {srt_path}')
