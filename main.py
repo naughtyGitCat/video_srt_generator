@@ -43,7 +43,7 @@ if __name__ == '__main__':
                 #                                               audio_file,
                 #                                               language=None,
                 #                                               verbose=CONFIG.Log.level == logging.DEBUG)
-                segments, info = model.transcribe(audio_file)
+                segments, info = model.transcribe(audio_file,vad_filter=False)
                 logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
                 for segment in segments:
                     logger.debug(f"segment: {segment}")
@@ -54,5 +54,5 @@ if __name__ == '__main__':
                 te = datetime.datetime.now()
                 logger.debug(f"transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
                 logger.info(f"now delete tmp audio file {audio_file}")
-                remove_file(audio_file)
+                # remove_file(audio_file)
 
