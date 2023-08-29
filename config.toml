@@ -13,7 +13,7 @@ size = 8  # mb
 # smb_password = ""
 
 [[targets]]
-path = "./share/STARS-250"
+path = "F:\\FC2PPV-2711719"
 type = "smb"  # smb,local
 suffixes = ["mp4", "mkv", "avi", "wmv"]
 # if smb:
@@ -22,7 +22,7 @@ smb_password = ""
 search_recursive = true
 
 [ffmpeg]
-binary_path = "/usr/bin/ffmpeg"            # full path
+binary_path = "./ffmpeg/ffmpeg.exe"            # full path
 tmp_path = "./tmp/"
 
 [whisper]
