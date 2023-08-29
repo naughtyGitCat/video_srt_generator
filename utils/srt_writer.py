@@ -74,17 +74,17 @@ class SubtitlesWriter(ResultWriter):
 
     def iterate_result(self, result: dict):
         for segment in result["segments"]:
-            segment_start = self.format_timestamp(segment["start"])
-            segment_end = self.format_timestamp(segment["end"])
-            segment_text = segment["text"].strip().replace("-->", "->")
+            segment_start = self.format_timestamp(segmen.start)
+            segment_end = self.format_timestamp(segment.end)
+            segment_text = segment.text.strip().replace("-->", "->")
 
-            if word_timings := segment.get("words", None):
-                all_words = [timing["word"] for timing in word_timings]
+            if segment.words is not None:
+                all_words = [timing.word for timing in segment.words]
                 all_words[0] = all_words[0].strip()  # remove the leading space, if any
                 last = segment_start
                 for i, this_word in enumerate(word_timings):
-                    start = self.format_timestamp(this_word["start"])
-                    end = self.format_timestamp(this_word["end"])
+                    start = self.format_timestamp(this_word.start)
+                    end = self.format_timestamp(this_word.end)
                     if last != start:
                         yield last, start, segment_text
 
@@ -154,9 +154,9 @@ class SRTWriter:
 
     def segment_to_srt(self, segment: dict):
         with open(self._srt_path, "w", encoding="utf-8") as f:
-            segment_start = self.format_timestamp(segment["start"])
-            segment_end = self.format_timestamp(segment["end"])
-            segment_text = segment["text"].strip().replace("-->", "->")
+            segment_start = self.format_timestamp(segment.start)
+            segment_end = self.format_timestamp(segment.end)
+            segment_text = segment.text.strip().replace("-->", "->")
             if CONFIG.Translate.enable:
                 translated_text = translator.translate(segment_text)
                 logger.debug(f"{segment_start} --> {segment_end} {translated_text}")
@@ -169,9 +169,9 @@ class SRTWriter:
         self.line_number += 1
 
     def segment_to_srt1(self, segment: dict):
-        segment_start = self.format_timestamp(segment["start"])
-        segment_end = self.format_timestamp(segment["end"])
-        segment_text = segment["text"].strip().replace("-->", "->")
+        segment_start = self.format_timestamp(segment.start)
+        segment_end = self.format_timestamp(segment.end)
+        segment_text = segment.text.strip().replace("-->", "->")
         if CONFIG.Translate.enable:
             translated_text = translator.translate(segment_text)
             logger.debug(f"{segment_start} --> {segment_end} {translated_text}")

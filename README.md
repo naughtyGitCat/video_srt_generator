@@ -10,7 +10,9 @@ please customize you setting in `config.toml`
 
 ### linux
 *tested on debian12 + python3.11 + (smb mounted as cifs) media*
-
+```sh
+apt install nvidia-cudnn
+```
 **please mount smb share by cifs as a local path, and add the mounted path as `local` in `config.toml`**
 
 请将smb共享挂载到linux的目录上, 在配置文件中以local的类型设置
@@ -77,3 +79,5 @@ during cut a 1min10s video and transcribe to audio
 * https://github.com/openai/whisper
 * https://www.spapas.net/2023/05/22/ai-auto-subtitling/
 * https://github.com/ggerganov/whisper.cpp
+* https://stackoverflow.com/questions/66977227/could-not-load-dynamic-library-libcudnn-so-8-when-running-tensorflow-on-ubun
+* https://github.com/guillaumekln/faster-whisper
