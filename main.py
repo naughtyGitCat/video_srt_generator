@@ -9,7 +9,7 @@ from utils import srt_writer, video2audio, transcriber
 logger = get_logger("main")
 
 
-def get_srt_filepath(video_file_fullpath: str) -> str:
+def get_srt_filepath(video_file_fullpath: str) -> str: 
     vf = pathlib.Path(video_file_fullpath)
     return str(vf.parent.joinpath(f"{vf.stem}.srt"))
 
@@ -43,7 +43,9 @@ if __name__ == '__main__':
                 #                                               audio_file,
                 #                                               language=None,
                 #                                               verbose=CONFIG.Log.level == logging.DEBUG)
-                segments, info = model.transcribe(audio_file,vad_filter=False)
+                segments, info = model.transcribe(audio_file,
+                                                  vad_filter=False, suppress_blank=False, max_initial_timestamp=88888,
+                                                  word_timestamps=True)
                 logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
                 for segment in segments:
                     logger.debug(f"segment: {segment}")
