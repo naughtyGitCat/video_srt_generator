@@ -56,5 +56,5 @@ if __name__ == '__main__':
                 te = datetime.datetime.now()
                 logger.debug(f"transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
                 logger.info(f"now delete tmp audio file {audio_file}")
-                # remove_file(audio_file)
+                remove_file(audio_file)
 
