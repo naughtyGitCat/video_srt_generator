@@ -1,5 +1,5 @@
 import datetime
-import logging
+import argparse
 import pathlib
 
 import faster_whisper
@@ -7,6 +7,10 @@ from utils import CONFIG, get_files, get_logger, have_srt_file, remove_file
 from utils import srt_writer, video2audio, transcriber
 
 logger = get_logger("main")
+
+parser = argparse.ArgumentParser(description="dictate video to srt and do translate")
+parser.add_argument("--daemon", dest="daemonize", action='', default=False, help="run in daemonize")
+parser.add_argument("--listen", dest="listen", action='', default="0.0.0.0:8080", help="web page")
 
 
 def get_srt_filepath(video_file_fullpath: str) -> str: 
