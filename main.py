@@ -1,7 +1,7 @@
 import datetime
 import argparse
 import pathlib
-
+import traceback
 import faster_whisper
 from utils import CONFIG, get_files, get_logger, remove_file
 from utils.file import need_translation
@@ -27,7 +27,11 @@ if __name__ == '__main__':
     logger.info('loop setting targets')
     for target in CONFIG.Targets:
         logger.debug(f"now get files in target {target}")
-        files = get_files(target)
+        try:
+           files = get_files(target)
+        except Exception as e:
+            print(traceback)
+            logger.warn(e)
         model: faster_whisper.WhisperModel
         model_loaded: bool = False
         for video_file in files:

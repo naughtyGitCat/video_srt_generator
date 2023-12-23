@@ -1,6 +1,7 @@
 .idea
 *.py~
 *.un~
+*.log
 __pycache__
 .vs
 .vscode
