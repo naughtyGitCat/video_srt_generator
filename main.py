@@ -21,12 +21,13 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    logger.info('get files')
+    logger.info('loop setting targets')
     for target in CONFIG.Targets:
         files = get_files(target)
         model: faster_whisper.WhisperModel
         model_loaded: bool = False
         for video_file in files:
+            logger.info(f"loop file in target: {target.path}")
             # if not have srt file, or configured to overwrite
             if need_translation(video_file):
                 if not model_loaded:
