@@ -50,7 +50,7 @@ def get_path_parent(path: str) -> str:
         return str(pathlib.Path(path).parent)
 
 
-def join_path(seg1: str, seg2: str) -> str: 
+def join_path(seg1: str, seg2: str) -> str:
     """optimized for smb/local file"""
     if platform.system() != 'Windows' and seg1.startswith("\\\\"):
         return f"{seg1}\{seg2}"
@@ -67,18 +67,15 @@ def get_files(target: Target) -> typing.Iterable[str]:
     if target.path.startswith('\\'):
         return get_smb_file(target)
     else:
-        return get_local_file(target)
+        return get_local_file(target.path, target.search_recursive, target.suffixes)
 
 
 def get_local_file(path: str, search_recursive: bool, suffixes: list[str]) -> typing.Iterable[str]:
-    print('os.scandir')
     entrypoints = os.scandir(path)
     for entrypoint in entrypoints:
-        print(f'entrypoint: {entrypoint.name}')
         if entrypoint.is_dir() and search_recursive:
-            r_files = get_local_file(entrypoint.path)
+            r_files = get_local_file(entrypoint.path, search_recursive, suffixes)
             for file in r_files:
-                print(f'file: {file}')
                 yield file
         if entrypoint.is_file():
             for suffix in suffixes:
@@ -91,7 +88,7 @@ def get_smb_file(target: Target) -> typing.Iterable[any]:
         smb_login(target)
     for smb_entry in smbclient.scandir(target.path):
         if smb_entry.is_dir() and target.search_recursive:
-            r_files = get_local_file(target)
+            r_files = get_smb_file(target)
             for file in r_files:
                 yield file
         if smb_entry.is_file():
