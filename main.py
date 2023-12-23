@@ -1,5 +1,6 @@
 import datetime
 import argparse
+import logging
 import pathlib
 import traceback
 import faster_whisper
@@ -25,50 +26,50 @@ if __name__ == '__main__':
         CONFIG
     )
     logger.info('loop setting targets')
-    for target in CONFIG.Targets:
-        logger.debug(f"now get files in target {target}")
-        try:
-           files = get_files(target)
-        except Exception as e:
-            print(traceback)
-            logger.warn(e)
-        model: faster_whisper.WhisperModel
-        model_loaded: bool = False
-        for video_file in files:
-            logger.info(f"loop file in target: {target.path}")
-            # if not have srt file, or configured to overwrite
-            if need_translation(video_file):
-                if not model_loaded:
-                    logger.info('load model')
-                    model = faster_whisper.WhisperModel(CONFIG.Whisper.model_name,
-                                                        device=CONFIG.Whisper.model_device,
-                                                        compute_type="int8",
-                                                        download_root=CONFIG.Whisper.model_path)
-                    model_loaded = True
-                logger.info(f'do file: {video_file}')
-                audio_file = video2audio.video2audio(video_file)
+    try:
+        for target in CONFIG.Targets:
+            logger.debug(f"now get files in target {target}")
+            files = get_files(target)
+            model: faster_whisper.WhisperModel
+            model_loaded: bool = False
+            for video_file in files:
+                logger.info(f"loop file in target: {target.path}")
+                # if not have srt file, or configured to overwrite
+                if need_translation(video_file):
+                    if not model_loaded:
+                        logger.info('load model')
+                        model = faster_whisper.WhisperModel(CONFIG.Whisper.model_name,
+                                                            device=CONFIG.Whisper.model_device,
+                                                            compute_type="int8",
+                                                            download_root=CONFIG.Whisper.model_path)
+                        model_loaded = True
+                    logger.info(f'do file: {video_file}')
+                    audio_file = video2audio.video2audio(video_file)
 
-                logger.info(f'now transcribe {audio_file}')
-                srt_path = get_srt_filepath(video_file)
+                    logger.info(f'now transcribe {audio_file}')
+                    srt_path = get_srt_filepath(video_file)
 
-                writer = srt_writer.SRTWriter(srt_path)
-                ts = datetime.datetime.now()
-                # segments = transcriber.transcribe_to_segments(model,
-                #                                               audio_file,
-                #                                               language=None,
-                #                                               verbose=CONFIG.Log.level == logging.DEBUG)
-                segments, info = model.transcribe(audio_file,
-                                                  vad_filter=False, suppress_blank=False, max_initial_timestamp=88888,
-                                                  word_timestamps=True)
-                logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
-                for segment in segments:
-                    logger.debug(f"segment: {segment}")
-                    writer.segment_to_srt1(segment)
+                    writer = srt_writer.SRTWriter(srt_path)
+                    ts = datetime.datetime.now()
+                    # segments = transcriber.transcribe_to_segments(model,
+                    #                                               audio_file,
+                    #                                               language=None,
+                    #                                               verbose=CONFIG.Log.level == logging.DEBUG)
+                    segments, info = model.transcribe(audio_file,
+                                                      vad_filter=False, suppress_blank=False, max_initial_timestamp=88888,
+                                                      word_timestamps=True)
+                    logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
+                    for segment in segments:
+                        logger.debug(f"segment: {segment}")
+                        writer.segment_to_srt1(segment)
 
-                logger.info(f'srt file path: {srt_path}')
-                logger.info(f'srt file for {video_file} generated')
-                te = datetime.datetime.now()
-                logger.debug(f"transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
-                logger.info(f"now delete tmp audio file {audio_file}")
-                remove_file(audio_file)
+                    logger.info(f'srt file path: {srt_path}')
+                    logger.info(f'srt file for {video_file} generated')
+                    te = datetime.datetime.now()
+                    logger.debug(f"transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
+                    logger.info(f"now delete tmp audio file {audio_file}")
+                    remove_file(audio_file)
+    except Exception as e:
+        logger.warning(f"run failed {e}")
+        logger.info(traceback.format_exc())
 
