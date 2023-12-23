@@ -21,6 +21,9 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    logger.debug(
+        CONFIG
+    )
     logger.info('loop setting targets')
     for target in CONFIG.Targets:
         files = get_files(target)
