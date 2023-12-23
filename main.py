@@ -15,16 +15,14 @@ parser.add_argument("--daemon", dest="daemonize", action='store', default=False,
 parser.add_argument("--listen", dest="listen", action='store', default="0.0.0.0:8080", help="web page")
 
 
-def get_srt_filepath(video_file_fullpath: str) -> str: 
+def get_srt_filepath(video_file_fullpath: str) -> str:
     vf = pathlib.Path(video_file_fullpath)
     return str(vf.parent.joinpath(f"{vf.stem}.srt"))
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    logger.debug(
-        CONFIG
-    )
+    logger.debug(CONFIG)
     logger.info('loop setting targets')
     try:
         for target in CONFIG.Targets:

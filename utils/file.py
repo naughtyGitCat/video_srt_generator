@@ -50,7 +50,7 @@ def get_path_parent(path: str) -> str:
         return str(pathlib.Path(path).parent)
 
 
-def join_path(seg1: str, seg2: str) -> str: 
+def join_path(seg1: str, seg2: str) -> str:
     """optimized for smb/local file"""
     if platform.system() != 'Windows' and seg1.startswith("\\\\"):
         return f"{seg1}\{seg2}"
@@ -71,14 +71,12 @@ def get_files(target: Target) -> typing.Iterable[str]:
 
 
 def get_local_file(target: Target) -> typing.Iterable[str]:
-    print('os.scandir')
     entrypoints = os.scandir(target.path)
     for entrypoint in entrypoints:
-        print(f'entrypoint: {entrypoint.name}')
         if entrypoint.is_dir() and target.search_recursive:
+            print(f'entrypoint: {entrypoint.path}')
             r_files = get_local_file(target)
             for file in r_files:
-                print(f'file: {file}')
                 yield file
         if entrypoint.is_file():
             for suffix in target.suffixes:
