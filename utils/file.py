@@ -70,18 +70,18 @@ def get_files(target: Target) -> typing.Iterable[str]:
         return get_local_file(target)
 
 
-def get_local_file(target: Target) -> typing.Iterable[str]:
+def get_local_file(path: str, search_recursive: bool, suffixes: list[str]) -> typing.Iterable[str]:
     print('os.scandir')
-    entrypoints = os.scandir(target.path)
+    entrypoints = os.scandir(path)
     for entrypoint in entrypoints:
         print(f'entrypoint: {entrypoint.name}')
-        if entrypoint.is_dir() and target.search_recursive:
-            r_files = get_local_file(target)
+        if entrypoint.is_dir() and search_recursive:
+            r_files = get_local_file(entrypoint.path)
             for file in r_files:
                 print(f'file: {file}')
                 yield file
         if entrypoint.is_file():
-            for suffix in target.suffixes:
+            for suffix in suffixes:
                 if entrypoint.name.endswith(suffix):
                     yield entrypoint.path
 
