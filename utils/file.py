@@ -6,7 +6,7 @@ import smbclient
 import platform
 
 
-from utils.config import Target
+from utils.config import CONFIG, Target
 
 
 def have_srt_file(video_file: str) -> bool:
@@ -17,6 +17,19 @@ def have_srt_file(video_file: str) -> bool:
         return smbclient.path.exists(srt_file)
     else:
         return os.path.exists(srt_file)
+
+
+def is_pre_translated(video_file_name: str) -> bool:
+    if video_file_name.upper().endswith("-C"):
+        return True
+
+
+def need_translation(video_file_name: str) -> bool:
+    if is_pre_translated(video_file_name):
+        return False
+    if have_srt_file(video_file_name) and not CONFIG.Srt.overwrite:
+        return False
+    return True
 
 
 def get_file_name(path: str) -> str:

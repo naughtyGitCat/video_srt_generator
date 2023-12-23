@@ -3,14 +3,15 @@ import argparse
 import pathlib
 
 import faster_whisper
-from utils import CONFIG, get_files, get_logger, have_srt_file, remove_file
+from utils import CONFIG, get_files, get_logger, remove_file
+from utils.file import need_translation
 from utils import srt_writer, video2audio, transcriber
 
 logger = get_logger("main")
 
 parser = argparse.ArgumentParser(description="dictate video to srt and do translate")
-parser.add_argument("--daemon", dest="daemonize", action='', default=False, help="run in daemonize")
-parser.add_argument("--listen", dest="listen", action='', default="0.0.0.0:8080", help="web page")
+parser.add_argument("--daemon", dest="daemonize", action='store', default=False, help="run in daemonize")
+parser.add_argument("--listen", dest="listen", action='store', default="0.0.0.0:8080", help="web page")
 
 
 def get_srt_filepath(video_file_fullpath: str) -> str: 
@@ -27,7 +28,7 @@ if __name__ == '__main__':
         model_loaded: bool = False
         for video_file in files:
             # if not have srt file, or configured to overwrite
-            if not have_srt_file(video_file) or CONFIG.Srt.overwrite:
+            if need_translation(video_file):
                 if not model_loaded:
                     logger.info('load model')
                     model = faster_whisper.WhisperModel(CONFIG.Whisper.model_name,
