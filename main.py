@@ -26,6 +26,7 @@ if __name__ == '__main__':
     )
     logger.info('loop setting targets')
     for target in CONFIG.Targets:
+        logger.debug(f"now get files in target {target}")
         files = get_files(target)
         model: faster_whisper.WhisperModel
         model_loaded: bool = False
