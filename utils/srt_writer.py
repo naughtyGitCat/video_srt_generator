@@ -8,6 +8,7 @@ from typing import TextIO
 from utils import translator
 from utils import CONFIG
 from utils import get_logger
+from faster_whisper.transcribe import Segment
 
 logger = get_logger("srt")
 
@@ -74,7 +75,7 @@ class SubtitlesWriter(ResultWriter):
 
     def iterate_result(self, result: dict):
         for segment in result["segments"]:
-            segment_start = self.format_timestamp(segmen.start)
+            segment_start = self.format_timestamp(segment.start)
             segment_end = self.format_timestamp(segment.end)
             segment_text = segment.text.strip().replace("-->", "->")
 
@@ -152,7 +153,7 @@ class SRTWriter:
             decimal_marker=self.decimal_marker,
         )
 
-    def segment_to_srt(self, segment: dict):
+    def segment_to_srt(self, segment: Segment):
         with open(self._srt_path, "w", encoding="utf-8") as f:
             segment_start = self.format_timestamp(segment.start)
             segment_end = self.format_timestamp(segment.end)
@@ -168,7 +169,7 @@ class SRTWriter:
             print(f"{self.line_number}\n{segment_start} --> {segment_end}\n{segment_text}\n", file=f, flush=True)
         self.line_number += 1
 
-    def segment_to_srt1(self, segment: dict):
+    def segment_to_srt1(self, segment: Segment):
         segment_start = self.format_timestamp(segment.start)
         segment_end = self.format_timestamp(segment.end)
         segment_text = segment.text.strip().replace("-->", "->")
@@ -180,6 +181,7 @@ class SRTWriter:
                 translated_text = f"{segment_text}\n{translated_text}"
             segment_text = translated_text
             time.sleep(0.3)  # Too Many Requests for url
-        print(f"{self.line_number}\n{segment_start} --> {segment_end}\n{segment_text}\n", file=self._srt_file, flush=True)
+        print(f"{self.line_number}\n{segment_start} --> {segment_end}\n{segment_text}\n",
+              file=self._srt_file, flush=True)
         self.line_number += 1
 

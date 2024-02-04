@@ -72,6 +72,7 @@ if __name__ == '__main__':
                         for segment in segments:
                             logger.debug(f"{video_file} segment: {segment}")
                             writer.segment_to_srt1(segment)
+                            recorder.update_progress(video_file, segment.start/info.duration)
                         logger.info(f'srt file path: {srt_path}')
                         logger.info(f'srt file for {video_file} generated')
                         te = datetime.datetime.now()
