@@ -50,7 +50,7 @@ if __name__ == '__main__':
                         audio_file = video2audio.video2audio(video_file)
                     except Exception as e:
                         logger.warning(e)
-                        recorder.update_status(video_file, "failed", str(e))
+                        recorder.update_status(video_file, "failed", traceback.format_exc())
                         continue
 
                     try:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
                         remove_file(audio_file)
                     except Exception as e:
                         logger.warning(e)
-                        recorder.update_status(video_file, "failed", str(e))
+                        recorder.update_status(video_file, "failed", traceback.format_exc())
     except Exception as e:
         logger.warning(f"run failed {e}")
         logger.info(traceback.format_exc())

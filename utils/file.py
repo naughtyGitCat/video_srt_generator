@@ -80,7 +80,7 @@ def get_local_file(path: str, search_recursive: bool, suffixes: list[str]) -> ty
         if entrypoint.is_file():
             for suffix in suffixes:
                 if entrypoint.name.endswith(suffix):
-                    yield entrypoint.path
+                    yield os.path.abspath(entrypoint.path)
 
 
 def get_smb_file(target: Target) -> typing.Iterable[any]:
