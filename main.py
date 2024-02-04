@@ -42,7 +42,11 @@ if __name__ == '__main__':
                                                             download_root=CONFIG.Whisper.model_path)
                         model_loaded = True
                     logger.info(f'do file: {video_file}')
-                    audio_file = video2audio.video2audio(video_file)
+                    try:
+                        audio_file = video2audio.video2audio(video_file)
+                    except Exception as e:
+                        logger.warn(e)
+                        continue
 
                     logger.info(f'now transcribe {audio_file}')
                     srt_path = get_srt_filepath(video_file)
@@ -58,7 +62,7 @@ if __name__ == '__main__':
                                                       word_timestamps=True)
                     logger.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
                     for segment in segments:
-                        logger.debug(f"segment: {segment}")
+                        logger.debug(f"{video_file} segment: {segment}")
                         writer.segment_to_srt1(segment)
 
                     logger.info(f'srt file path: {srt_path}')
