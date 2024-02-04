@@ -82,3 +82,4 @@ class RecordManager:
             """
         self.logger.debug(sql)
         self.conn.execute(sql)
+        self.conn.commit()
