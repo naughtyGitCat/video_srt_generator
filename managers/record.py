@@ -65,7 +65,7 @@ class RecordManager:
         name = get_file_name(path_name)
         sql = f"""
             UPDATE history
-            SET progress = {progress}
+            SET progress = {progress}, update_time='{datetime.datetime.now()}'
             WHERE path='{path}' AND name = '{name}'
             """
         self.logger.debug(sql)
@@ -77,7 +77,7 @@ class RecordManager:
         name = get_file_name(path_name)
         sql = f"""
             UPDATE history
-            SET status = '{status}', remark='{remark}'
+            SET status = '{status}', remark='{remark}', update_time='{datetime.datetime.now()}'
             WHERE path='{path}' AND name = '{name}'
             """
         self.logger.debug(sql)
