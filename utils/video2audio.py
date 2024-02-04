@@ -1,10 +1,16 @@
 # psyduck 20230618
+import os
 import subprocess
 from utils.config import CONFIG
 from utils.logger import get_logger
 from utils.file import (get_file_name, get_path_parent, join_path)
 
 log = get_logger("audio")
+
+
+def clean_audio() -> None:
+    if CONFIG.FFmpeg.tmp_path != "":
+        os.remove(CONFIG.FFmpeg.tmp_path)
 
 
 def video2audio(video_file: str) -> str:

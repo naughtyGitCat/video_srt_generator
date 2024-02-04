@@ -1,3 +1,4 @@
+import atexit
 import datetime
 import argparse
 import pathlib

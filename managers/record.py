@@ -45,10 +45,9 @@ class RecordManager:
               UNIQUE (path, name)
             );
             """
+        self.logger.debug(sql)
         self.conn.execute(sql)
-
-    def _table_exists(self) -> bool:
-        pass
+        self.conn.commit()
 
     def insert_record(self, path_name: str) -> None:
         path = get_path_parent(path_name)
@@ -57,7 +56,9 @@ class RecordManager:
                 INSERT OR REPLACE INTO history (path, name, status, progress, create_time, update_time, remark)
                 VALUES ('{path}', '{name}', 'start', 0, '{datetime.datetime.now()}', '{datetime.datetime.now()}', '');
                 """
+        self.logger.debug(sql)
         self.conn.execute(sql)
+        self.conn.commit()
 
     def update_progress(self, path_name: str, progress: float):
         path = get_path_parent(path_name)
@@ -67,7 +68,9 @@ class RecordManager:
             SET progress = {progress}
             WHERE path='{path}' AND name = '{name}'
             """
+        self.logger.debug(sql)
         self.conn.execute(sql)
+        self.conn.commit()
 
     def update_status(self, path_name: str, status: str, remark: str = '') -> None:
         path = get_path_parent(path_name)
@@ -77,4 +80,5 @@ class RecordManager:
             SET status = '{status}', remark='{remark}'
             WHERE path='{path}' AND name = '{name}'
             """
+        self.logger.debug(sql)
         self.conn.execute(sql)
