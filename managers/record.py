@@ -3,6 +3,7 @@
 import logging
 import datetime
 import dataclasses
+import typing
 
 from utils.logger import get_logger
 from utils.file import (get_file_name, get_path_parent)
@@ -104,6 +105,14 @@ class HistoryRecordManager:
             );
             """
         self._dbm.execute(sql)
+
+    def select_latest(self) -> dict:
+        sql = "SELECT * FROM history ORDER BY ID DESC LIMIT 1"
+        return self._dbm.single(sql)
+
+    def select_history(self, page_size: int = 10, page_number: int = 1) -> typing.Iterable[dict]:
+        sql = f"SELECT * FROM history ORDER BY ID DESC LIMIT {page_size} {(page_number-1)*page_size}"
+        return self._dbm.fetch(sql)
 
     def insert(self, path_name: str) -> None:
         path = get_path_parent(path_name)

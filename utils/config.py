@@ -12,6 +12,12 @@ class Log:
     count: int
     size: int
 
+@dataclasses.dataclass
+class Web:
+    host: str
+    port: int
+    enable: bool
+
 
 @dataclasses.dataclass
 class Target:
@@ -65,6 +71,8 @@ class Config:
 
     Srt: typing.Optional[Srt]
 
+    Web: typing.Optional[Web]
+
     Log: typing.Optional[Log]
 
     @classmethod
@@ -82,6 +90,8 @@ class Config:
                 log_config.level = logging.WARN
             if data['log']['level'] == "error":
                 log_config.level = logging.ERROR
+
+            web_config = Web(host=data['web']['host'], port=data['web']['port'], enable=data['web']['enable'])
 
             targets: list[Target] = list()
             for t in data['targets']:
@@ -109,6 +119,7 @@ class Config:
                                    Whisper=whisper_config,
                                    Translate=translate_config,
                                    Srt=srt_config,
+                                   Web=web_config,
                                    Log=log_config)
             return cls._instance
 

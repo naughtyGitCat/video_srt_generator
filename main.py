@@ -1,15 +1,19 @@
-import atexit
 import datetime
 import argparse
-import os
+import signal
 import pathlib
 import traceback
+import types
+import typing
+
 import faster_whisper
+
+from common.objects import ShareObjects
 from utils import CONFIG, get_files, get_logger, remove_file
 from utils.file import need_translation
-from utils import srt_writer, video2audio, transcriber
+from utils import srt_writer, video2audio
 from managers.database import DatabaseManager
-from common.objects import ShareObjects
+from managers.web import WebManager
 from managers.record import HistoryRecordManager, TranslationRecordManager
 
 logger = get_logger("main")
@@ -20,21 +24,34 @@ parser.add_argument("--listen", dest="listen", action='store', default="0.0.0.0:
 
 
 def init():
+    logger.debug(CONFIG)
+
     ShareObjects.dbm = DatabaseManager()
+    ShareObjects.history_record_manager = HistoryRecordManager()
+    ShareObjects.translation_record_manager = TranslationRecordManager()
+
     ShareObjects.current_status = "init"
     ShareObjects.current_srt = ""
     ShareObjects.current_audio = ""
-    logger.debug(CONFIG)
+
+    signal.signal(signal.SIGTERM, handle_exit)
+    signal.signal(signal.SIGINT, handle_exit)
+
+    WebManager().run()
 
 
-def handle_exit():
+def handle_exit(sig_num: int, frame: typing.Optional[types.FrameType]) -> None:
+    logger.info(f"received signum: {sig_num}, frame: {frame}")
     if ShareObjects.current_status == "transcribe":
         if ShareObjects.current_srt != "":
+            logger.info(f"now clean srt file {ShareObjects.current_srt}")
             remove_file(ShareObjects.current_srt)
         if ShareObjects.current_audio != "":
+            logger.info(f"now clean audio file {ShareObjects.current_audio}")
             remove_file(ShareObjects.current_audio)
     if ShareObjects.current_status == "video2audio":
         if ShareObjects.current_audio != "":
+            logger.info(f"now clean audio file {ShareObjects.current_audio}")
             remove_file(ShareObjects.current_audio)
 
 
@@ -46,7 +63,6 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     init()
-    atexit.register(handle_exit)
     logger.info('loop setting targets')
     recorder = HistoryRecordManager()
     translation_record = TranslationRecordManager()
