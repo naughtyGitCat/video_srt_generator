@@ -6,7 +6,7 @@ import traceback
 import threading
 import dataclasses
 
-from bottle import run, response, get, request, install
+from bottle import run, response, get, request
 
 from common.objects import ShareObjects
 from utils.logger import get_logger
@@ -31,7 +31,6 @@ class WebManager(threading.Thread):
 
     def run(self) -> None:
         self._logger.info(f"Start to run {self.name}...")
-        install(self._logger)
         run(host=CONFIG.Web.host, port=CONFIG.Web.port)
 
     @staticmethod
