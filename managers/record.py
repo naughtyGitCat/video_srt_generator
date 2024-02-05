@@ -69,7 +69,7 @@ class TranslationRecordManager:
         name = get_file_name(path_name)
         sql = f"""
             UPDATE translation_job
-            SET status = '{status}', remark='{remark}', update_time='{datetime.datetime.now()}'
+            SET status = '{status}', remark='{remark.replace("'", "#")}', update_time='{datetime.datetime.now()}'
             WHERE path='{path}' AND name = '{name}'
             """
         self._dbm.execute(sql)
