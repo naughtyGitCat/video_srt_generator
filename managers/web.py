@@ -91,9 +91,9 @@ class WebManager(threading.Thread):
 
     @staticmethod
     def dicts2htmltable(data):
-        html = ''.join('<th>' + x + '</th>' for x in data[0].keys())
+        html = ''.join(f'<th>{x}</th>' for x in data[0].keys())
         for d in data:
-            html += '<tr>' + ''.join('<td>' + x + '</td>' for x in d.values()) + '</tr>'
+            html += '<tr>' + ''.join(f'<td>{x}</td>' for x in d.values()) + '</tr>'
         return '<table border=1 class="stocktable" id="table1">' + html + '</table>'
 
 
