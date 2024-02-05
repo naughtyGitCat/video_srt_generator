@@ -1,5 +1,7 @@
 # 20230906
-# todo implement
+#
+from __future__ import annotations
+
 import logging
 import datetime
 import dataclasses
