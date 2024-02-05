@@ -20,7 +20,7 @@ parser.add_argument("--listen", dest="listen", action='store', default="0.0.0.0:
 
 
 def init():
-    ShareObjects.dbm = DatabaseManager
+    ShareObjects.dbm = DatabaseManager()
     ShareObjects.current_status = "init"
     ShareObjects.current_srt = ""
     ShareObjects.current_audio = ""
@@ -44,11 +44,12 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    init()
     atexit.register(handle_exit)
     logger.debug(CONFIG)
     logger.info('loop setting targets')
     recorder = HistoryRecordManager()
-    translation_record = TranslationRecordManager
+    translation_record = TranslationRecordManager()
     try:
         for target in CONFIG.Targets:
             logger.debug(f"now get files in target {target}")
