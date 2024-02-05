@@ -139,4 +139,3 @@ if __name__ == '__main__':
     except Exception as e:
         logger.warning(f"run failed {e}")
         logger.info(traceback.format_exc())
-
