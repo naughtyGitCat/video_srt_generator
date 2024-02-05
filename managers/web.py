@@ -59,38 +59,25 @@ class WebManager(threading.Thread):
     @get('/history')
     def history():
         """
-        /history?page_size=10&page_number=1
+        /history?page_size=10&page_number=1&show_html=true
         """
         try:
             response.status = 200
             page_size = int(request.query.page_size) if request.query.page_size != "" else 10
             page_number = int(request.query.page_number) if request.query.page_number != "" else 1
+            show_html = True if request.query.show_html.lower() == "true" else False
             raw = ShareObjects.history_record_manager.select_history(page_size, page_number)
-            ret = json.dumps({"code": 200, "data": list(raw)})
+            if show_html:
+                ret = WebManager.dicts2table(raw)
+            else:
+                ret = json.dumps({"code": 200, "data": list(raw)})
         except Exception as e:
             response.status = 417
             ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
         return ret
 
     @staticmethod
-    @get('/history/html')
-    def history():
-        """
-        /history?page_size=10&page_number=1
-        """
-        try:
-            response.status = 200
-            page_size = int(request.query.page_size) if request.query.page_size != "" else 10
-            page_number = int(request.query.page_number) if request.query.page_number != "" else 1
-            raw = ShareObjects.history_record_manager.select_history(page_size, page_number)
-            ret = WebManager.dicts2htmltable(raw)
-        except Exception as e:
-            response.status = 417
-            ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
-        return ret
-
-    @staticmethod
-    def dicts2htmltable(dicts: typing.Iterable[dict]):
+    def dicts2table(dicts: typing.Iterable[dict]):
         first_iter = True
         html = ""
         for d in dicts:
