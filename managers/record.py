@@ -8,7 +8,9 @@ import typing
 from utils.logger import get_logger
 from utils.file import (get_file_name, get_path_parent)
 from common.objects import ShareObjects
-from managers.database import DatabaseManager
+
+if typing.TYPE_CHECKING:
+    from managers.database import DatabaseManager
 
 
 @dataclasses.dataclass

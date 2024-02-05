@@ -1,7 +1,9 @@
 # 20240204
+import typing
 
-from managers.database import DatabaseManager
-from managers.record import  HistoryRecordManager, TranslationRecordManager
+if typing.TYPE_CHECKING:
+    from managers.database import DatabaseManager
+    from managers.record import HistoryRecordManager, TranslationRecordManager
 
 
 class ShareObjects:
