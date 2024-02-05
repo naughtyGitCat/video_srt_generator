@@ -11,7 +11,7 @@ class DatabaseManager:
     _logger: logging.Logger
 
     def __init__(self):
-        self._conn = sqlite3.connect("data.db")
+        self._conn = sqlite3.connect("data.db", check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._logger = get_logger("database")
 
