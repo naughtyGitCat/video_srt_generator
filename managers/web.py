@@ -49,10 +49,10 @@ class WebManager(threading.Thread):
     def current():
         try:
             response.status = 200
-            ret = json.dumps(ResponseData(data=ShareObjects.history_record_manager.select_latest().__dict__))
+            ret = json.dumps({"code": 200, "data": ShareObjects.history_record_manager.select_latest()})
         except Exception as e:
-            response.status = 418
-            ret = json.dumps(ResponseData(code=418, error=f"{e} {traceback.format_exc()}").__dict__)
+            response.status = 417
+            ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
         return ret
 
     @staticmethod
@@ -65,11 +65,11 @@ class WebManager(threading.Thread):
             response.status = 200
             page_size = int(request.query.page_size) if request.query.page_size != "" else 10
             page_number = int(request.query.page_number) if request.query.page_number != "" else 1
-            ret = json.dumps(ResponseData(
-                data=ShareObjects.history_record_manager.select_history(page_size, page_number).__dict__))
+            ret = json.dumps({"code": 200,
+                              "data": ShareObjects.history_record_manager.select_history(page_size, page_number)})
         except Exception as e:
-            response.status = 418
-            ret = json.dumps(ResponseData(code=418, error=f"{e} {traceback.format_exc()}").__dict__)
+            response.status = 417
+            ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
         return ret
 
 
