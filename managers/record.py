@@ -55,7 +55,7 @@ class TranslationRecordManager:
         name = get_file_name(path_name)
         sql = f"""
                 INSERT OR REPLACE INTO translation_job (path, name, status, progress, create_time, update_time, remark)
-                VALUES ('{path}', '{name}', 'start', 0, '{datetime.datetime.now()}', '{datetime.datetime.now()}', '');
+                VALUES ('{path}', '{name}', 'ready', 0, '{datetime.datetime.now()}', '{datetime.datetime.now()}', '');
                 """
         self._dbm.execute(sql)
 
