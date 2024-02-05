@@ -115,7 +115,7 @@ class HistoryRecordManager:
         return self._dbm.single(sql)
 
     def select_history(self, page_size: int = 10, page_number: int = 1) -> typing.Iterable[dict]:
-        sql = f"SELECT * FROM history ORDER BY ID DESC LIMIT {page_size} {(page_number-1)*page_size}"
+        sql = f"SELECT * FROM history ORDER BY ID DESC LIMIT {page_size} OFFSET {(page_number-1)*page_size}"
         return self._dbm.fetch(sql)
 
     def insert(self, path_name: str) -> None:

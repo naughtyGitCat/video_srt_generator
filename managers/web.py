@@ -65,8 +65,8 @@ class WebManager(threading.Thread):
             response.status = 200
             page_size = int(request.query.page_size) if request.query.page_size != "" else 10
             page_number = int(request.query.page_number) if request.query.page_number != "" else 1
-            ret = json.dumps({"code": 200,
-                              "data": ShareObjects.history_record_manager.select_history(page_size, page_number)})
+            raw = ShareObjects.history_record_manager.select_history(page_size, page_number)
+            ret = json.dumps({"code": 200, "data": list(raw)})
         except Exception as e:
             response.status = 417
             ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})

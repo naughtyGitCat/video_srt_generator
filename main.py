@@ -54,7 +54,8 @@ def handle_exit(sig_num: int, frame: typing.Optional[types.FrameType]) -> None:
         if ShareObjects.current_audio != "":
             logger.info(f"now clean audio file {ShareObjects.current_audio}")
             remove_file(ShareObjects.current_audio)
-
+    logger.info("graceful exit now...")
+    exit(0)
 
 def get_srt_filepath(video_file_fullpath: str) -> str:
     vf = pathlib.Path(video_file_fullpath)
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     translation_record = TranslationRecordManager()
     try:
         for target in CONFIG.Targets:
+            break
             logger.debug(f"now get files in target {target}")
             files = get_files(target)
             model: faster_whisper.WhisperModel
