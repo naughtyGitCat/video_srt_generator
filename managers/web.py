@@ -38,10 +38,10 @@ class WebManager(threading.Thread):
     def health():
         try:
             response.status = 200
-            ret = json.dumps(ResponseData(data=ShareObjects.current_status, code=200).__dict__)
+            ret = json.dumps({"code": 200, "data": ShareObjects.current_status})
         except Exception as e:
-            response.status = 418
-            ret = json.dumps(ResponseData(code=418, error=f"{e} {traceback.format_exc()}").__dict__)
+            response.status = 417
+            ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
         return ret
 
     @staticmethod
