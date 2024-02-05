@@ -24,6 +24,7 @@ def init():
     ShareObjects.current_status = "init"
     ShareObjects.current_srt = ""
     ShareObjects.current_audio = ""
+    logger.debug(CONFIG)
 
 
 def handle_exit():
@@ -46,7 +47,6 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
 if __name__ == '__main__':
     init()
     atexit.register(handle_exit)
-    logger.debug(CONFIG)
     logger.info('loop setting targets')
     recorder = HistoryRecordManager()
     translation_record = TranslationRecordManager()

@@ -176,7 +176,7 @@ class SRTWriter:
         segment_start = self.format_timestamp(segment.start)
         segment_end = self.format_timestamp(segment.end)
         segment_text = segment.text.strip().replace("-->", "->")
-        if CONFIG.Translate.enable and CONFIG.Translate.sync is False:
+        if CONFIG.Translate.enable and CONFIG.Translate.sync is True:
             translated_text = translator.translate(segment_text)
             logger.debug(f"{segment_start} --> {segment_end} {translated_text}")
             if CONFIG.Srt.bilingual:
