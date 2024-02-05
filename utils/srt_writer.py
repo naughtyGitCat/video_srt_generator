@@ -170,10 +170,13 @@ class SRTWriter:
         self.line_number += 1
 
     def segment_to_srt1(self, segment: Segment):
+        """
+        sync transcribe and translate
+        """
         segment_start = self.format_timestamp(segment.start)
         segment_end = self.format_timestamp(segment.end)
         segment_text = segment.text.strip().replace("-->", "->")
-        if CONFIG.Translate.enable:
+        if CONFIG.Translate.enable and CONFIG.Translate.sync is False:
             translated_text = translator.translate(segment_text)
             logger.debug(f"{segment_start} --> {segment_end} {translated_text}")
             if CONFIG.Srt.bilingual:
@@ -184,4 +187,6 @@ class SRTWriter:
         print(f"{self.line_number}\n{segment_start} --> {segment_end}\n{segment_text}\n",
               file=self._srt_file, flush=True)
         self.line_number += 1
+
+
 

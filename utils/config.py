@@ -39,6 +39,7 @@ class Whisper:
 @dataclasses.dataclass
 class Translate:
     enable: bool  # true,false
+    sync: bool  # true, false, do translate sync with transcribe, or later
     target_language: str
     api: list[str]  # https://github.com/UlionTse/translators
     fail_hint: str  # "","translation failed"
@@ -97,6 +98,7 @@ class Config:
                 whisper_config.model_device = None
 
             translate_config = Translate(enable=data['translate']['enable'],
+                                         sync=data['translate']['sync'],
                                          target_language=data['translate']['target_language'],
                                          api=data['translate']['api'], fail_hint=data['translate']['fail_hint'])
 

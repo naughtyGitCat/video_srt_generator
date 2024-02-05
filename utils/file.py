@@ -98,10 +98,18 @@ def get_smb_file(target: Target) -> typing.Iterable[any]:
 
 
 def remove_file(filepath: str):
+    # if exist_file(filepath):
     if filepath.startswith('\\'):
         smbclient.remove(filepath)
     else:
         os.remove(filepath)
+
+
+def exist_file(filepath: str):
+    if filepath.startswith("\\"):
+        return smbclient.path.exists(filepath)
+    else:
+        return os.path.exists(filepath)
 
 
 def create_file(filepath: str):
