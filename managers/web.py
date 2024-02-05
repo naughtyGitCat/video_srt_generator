@@ -83,16 +83,20 @@ class WebManager(threading.Thread):
             page_size = int(request.query.page_size) if request.query.page_size != "" else 10
             page_number = int(request.query.page_number) if request.query.page_number != "" else 1
             raw = ShareObjects.history_record_manager.select_history(page_size, page_number)
-            ret = WebManager.dicts2htmltable(list(raw))
+            ret = WebManager.dicts2htmltable(raw)
         except Exception as e:
             response.status = 417
             ret = json.dumps({"code": 417, "error": f"{e} {traceback.format_exc()}"})
         return ret
 
     @staticmethod
-    def dicts2htmltable(data):
-        html = ''.join(f'<th>{x}</th>' for x in data[0].keys())
-        for d in data:
+    def dicts2htmltable(dicts: typing.Iterable[dict]):
+        first_iter = True
+        html = ""
+        for d in dicts:
+            if first_iter:
+                html += ''.join(f'<th>{x}</th>' for x in d.keys())
+                first_iter = False
             html += '<tr>' + ''.join(f'<td>{x}</td>' for x in d.values()) + '</tr>'
         return '<table border=1 class="stocktable" id="table1">' + html + '</table>'
 
