@@ -37,7 +37,8 @@ def init():
     signal.signal(signal.SIGTERM, handle_exit)
     signal.signal(signal.SIGINT, handle_exit)
 
-    WebManager().run()
+    if CONFIG.Web.enable:
+        WebManager().run()
 
 
 def handle_exit(sig_num: int, frame: typing.Optional[types.FrameType]) -> None:
