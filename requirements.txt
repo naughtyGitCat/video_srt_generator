@@ -2,3 +2,4 @@ faster_whisper
 smbprotocol
 translators
 coloredlogs
+bottle
