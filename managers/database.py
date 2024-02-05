@@ -28,4 +28,5 @@ class DatabaseManager:
     def single(self, sql: str) -> dict:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
+            self._logger.debug(f"sqlite3 row {row}")
             return row
