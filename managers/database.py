@@ -23,10 +23,9 @@ class DatabaseManager:
     def fetch(self, sql: str) -> typing.Iterable[dict]:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
-            yield row
+            yield dict([(k, row[k]) for k in row.keys()])
 
     def single(self, sql: str) -> dict:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
-            self._logger.debug(f"sqlite3 row {row}")
-            return row
+            return dict([(k, row[k]) for k in row.keys()])
