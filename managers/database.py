@@ -23,11 +23,9 @@ class DatabaseManager:
     def fetch(self, sql: str) -> typing.Iterable[dict]:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
-            yield {k: row[k] for k in row.keys()}
+            yield {k: row[k] for k in list(row.keys())}
 
     def single(self, sql: str) -> dict:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
-            d = dict([(k, row[k]) for k in row.keys()])
-            self._logger.debug(d)
             return {k: row[k] for k in row.keys()}
