@@ -63,8 +63,8 @@ class WebManager(threading.Thread):
         """
         try:
             response.status = 200
-            page_size = int(request.query.page_size)
-            page_number = int(request.query.page_number)
+            page_size = int(request.query.page_size) if request.query.page_size != "" else 10
+            page_number = int(request.query.page_number) if request.query.page_number != "" else 1
             ret = json.dumps(ResponseData(
                 data=ShareObjects.history_record_manager.select_history(page_size, page_number).__dict__))
         except Exception as e:
