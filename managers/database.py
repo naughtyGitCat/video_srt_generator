@@ -28,4 +28,4 @@ class DatabaseManager:
     def single(self, sql: str) -> dict:
         self._logger.debug(sql)
         for row in self._conn.execute(sql):
-            return {k: row[k] for k in row.keys()}
+            return {k: row[k] for k in list(row.keys())}
