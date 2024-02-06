@@ -70,7 +70,6 @@ if __name__ == '__main__':
     translation_record = TranslationRecordManager()
     try:
         for target in CONFIG.Targets:
-            break
             logger.debug(f"now get files in target {target}")
             files = get_files(target)
             model: faster_whisper.WhisperModel
