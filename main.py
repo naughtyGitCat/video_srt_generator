@@ -117,6 +117,10 @@ if __name__ == '__main__':
                                                           max_initial_timestamp=88888,
                                                           word_timestamps=True)
                         logger.info(f"Detected language {info.language} with probability {info.language_probability}")
+                        recorder.update_status(
+                            video_file,
+                            "transcribe",
+                            f"language: {info.language}x{info.language_probability}, duration: {info.duration} second")
                         if CONFIG.Translate.enable is True and CONFIG.Translate.sync is False:
                             translation_record.insert(srt_path)
                         for segment in segments:
