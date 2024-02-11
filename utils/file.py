@@ -20,7 +20,7 @@ def have_srt_file(video_file: str) -> bool:
 
 
 def is_pre_translated(video_file_name: str) -> bool:
-    if video_file_name.upper().endswith("-C"):
+    if video_file_name.upper().find("-C.") > 0:
         return True
 
 
