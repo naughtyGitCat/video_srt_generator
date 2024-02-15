@@ -112,7 +112,7 @@ if __name__ == '__main__':
                         #                                               audio_file,
                         #                                               language=None,
                         #                                               verbose=CONFIG.Log.level == logging.DEBUG)
-                        segments, info = model.transcribe(audio_file,
+                        segments, info = model.transcribe(audio_file, language='ja', condition_on_previous_text=True,
                                                           vad_filter=False, suppress_blank=False,
                                                           max_initial_timestamp=88888,
                                                           word_timestamps=True)
