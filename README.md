@@ -81,3 +81,13 @@ during cut a 1min10s video and transcribe to audio
 * https://github.com/ggerganov/whisper.cpp
 * https://stackoverflow.com/questions/66977227/could-not-load-dynamic-library-libcudnn-so-8-when-running-tensorflow-on-ubun
 * https://github.com/guillaumekln/faster-whisper
+
+### TODO
+
+#### when file size change, overwrite srt generate 
+- https://stackoverflow.com/questions/16874598/how-do-i-calculate-the-md5-checksum-of-a-file-in-python
+
+### translate existed srt file
+> merge all lines, translate by paragraph, split to lines
+- https://pypi.org/project/srt/
+- https://github.com/byroot/pysrt

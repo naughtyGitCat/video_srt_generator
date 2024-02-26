@@ -57,6 +57,7 @@ def handle_exit(sig_num: int, frame: typing.Optional[types.FrameType]) -> None:
     logger.info("graceful exit now...")
     exit(0)
 
+
 def get_srt_filepath(video_file_fullpath: str) -> str:
     vf = pathlib.Path(video_file_fullpath)
     return str(vf.parent.joinpath(f"{vf.stem}.srt"))
