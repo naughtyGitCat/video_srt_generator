@@ -91,3 +91,6 @@ during cut a 1min10s video and transcribe to audio
 > merge all lines, translate by paragraph, split to lines
 - https://pypi.org/project/srt/
 - https://github.com/byroot/pysrt
+
+### when use remote file system, write srt tmp file to local, move back final srt to remote
+- https://stackoverflow.com/questions/25283882/determining-the-filesystem-type-from-a-path-in-python
