@@ -63,13 +63,13 @@ def get_srt_filepath(video_file_fullpath: str) -> str:
     return str(vf.parent.joinpath(f"{vf.stem}.srt"))
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+def main():
     init()
     logger.info('loop setting targets')
     recorder = HistoryRecordManager()
     translation_record = TranslationRecordManager()
     try:
+        logger.info("now looping targets")
         for target in CONFIG.Targets:
             logger.debug(f"now get files in target {target}")
             files = get_files(target)
@@ -109,11 +109,8 @@ if __name__ == '__main__':
                         writer = srt_writer.SRTWriter(srt_path)
 
                         ts = datetime.datetime.now()
-                        # segments = transcriber.transcribe_to_segments(model,
-                        #                                               audio_file,
-                        #                                               language=None,
-                        #                                               verbose=CONFIG.Log.level == logging.DEBUG)
-                        segments, info = model.transcribe(audio_file, language='ja', condition_on_previous_text=True,
+                        segments, info = model.transcribe(audio_file, language=target.language,
+                                                          condition_on_previous_text=True,
                                                           vad_filter=False, suppress_blank=False,
                                                           max_initial_timestamp=88888,
                                                           word_timestamps=True)
@@ -132,7 +129,9 @@ if __name__ == '__main__':
                         logger.info(f'srt file for {video_file} generated')
                         te = datetime.datetime.now()
                         logger.debug(f"transcribe and translate to srt cost: {(te - ts).total_seconds()} seconds")
-                        recorder.update_status(video_file, "success", f"elapse: {(te - ts).total_seconds()}s, total: {info.duration}s")
+                        recorder.update_status(
+                            video_file,
+                            "success", f"elapse: {(te - ts).total_seconds()}s, total: {info.duration}s")
                         logger.info(f"now delete tmp audio file {audio_file}")
                         remove_file(audio_file)
                         ShareObjects.current_status = "next"
@@ -145,3 +144,8 @@ if __name__ == '__main__':
     except Exception as e:
         logger.warning(f"run failed {e}")
         logger.info(traceback.format_exc())
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

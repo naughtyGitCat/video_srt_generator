@@ -27,6 +27,7 @@ class Target:
     smb_user: str = ""
     smb_password: str = ""
     search_recursive: bool = True
+    language: str = ""
 
 
 @dataclasses.dataclass
@@ -97,7 +98,7 @@ class Config:
             for t in data['targets']:
                 targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
                                       smb_user=t['smb_user'], smb_password=t['smb_password'],
-                                      search_recursive=t['search_recursive']))
+                                      search_recursive=t['search_recursive'], language=t['language']))
 
             ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
 
