@@ -1,4 +1,6 @@
 # psyduck 20230618
+# extract single channel audio from the video file
+
 import os
 import subprocess
 from utils.config import CONFIG
@@ -9,6 +11,9 @@ log = get_logger("audio")
 
 
 def clean_audio() -> None:
+    """
+    clean audio file
+    """
     if CONFIG.FFmpeg.tmp_path != "":
         os.remove(CONFIG.FFmpeg.tmp_path)
 

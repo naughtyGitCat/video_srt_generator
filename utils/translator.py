@@ -4,6 +4,9 @@ import traceback
 import translators
 
 from utils import CONFIG
+from utils.logger import get_logger
+
+logger = get_logger("translate")
 
 
 def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Translate.target_language) -> str:
@@ -20,8 +23,8 @@ def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Tr
             raise NotImplementedError
     except NotImplementedError:
         raise
-    except Exception:
-        print(traceback.format_exc())
+    except Exception as e:
+        logger.warning(f"translate {line} failed {e}, {traceback.format_exc()}")
         return result
 
 
