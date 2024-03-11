@@ -18,10 +18,6 @@ from managers.record import HistoryRecordManager, TranslationRecordManager
 
 logger = get_logger("main")
 
-parser = argparse.ArgumentParser(description="dictate video to srt and do translate")
-parser.add_argument("--daemon", dest="daemonize", action='store', default=False, help="run in daemonize")
-parser.add_argument("--listen", dest="listen", action='store', default="0.0.0.0:8080", help="web page")
-
 
 def init():
     logger.debug(CONFIG)

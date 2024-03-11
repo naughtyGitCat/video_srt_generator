@@ -117,6 +117,6 @@ def create_file(filepath: str):
 
 
 if __name__ == "__main__":
-    files = get_local_file(Target(path=r"E:\Something\英雄时刻", suffixes=["mp4"], type="local", search_recursive=True))
+    files = get_local_file(Target(path=r"E:\Something\x", suffixes=["mp4"], type="local", search_recursive=True))
     for f in files:
         print(f)
