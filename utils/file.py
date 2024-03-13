@@ -24,6 +24,13 @@ def is_pre_translated(video_file_name: str) -> bool:
         return True
 
 
+def subtitle_embedded() -> bool:
+    """
+    use mediainfo or ffmpeg check video file have subtitle stream
+    """
+    pass
+
+
 def need_translation(video_file_name: str) -> bool:
     if is_pre_translated(video_file_name):
         return False
