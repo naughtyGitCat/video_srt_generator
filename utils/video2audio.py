@@ -21,6 +21,7 @@ def clean_audio() -> None:
 def video2audio(video_file: str) -> str:
     """
      & 'ffmpeg.exe' -i "soa1.mp4" -f wav -vn -acodec pcm_s16le -ar 16000 -ac 1  -ss 00:00:00 -to 00:04:10  "soa1.1.wav"
+     -hide_banner hide ffmpeg version and build misc outputs
     :param video_file:
     :return:
     """
@@ -33,7 +34,7 @@ def video2audio(video_file: str) -> str:
     log.debug(f'video_file_name {video_file_name}')
     audio_file = join_path(_audio_tmp_path, f"{video_file_name}.wisper.wav")
     log.debug(f'audio_file {audio_file}')
-    p = subprocess.Popen([CONFIG.FFmpeg.binary_path, "-i", video_file,
+    p = subprocess.Popen([CONFIG.FFmpeg.binary_path, "-hide_banner", "-i", video_file,
                           "-f", "wav", "-vn", "-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1",
                           # "-ss", "00:00:00", "-to", "00:01:10",  # for test, only convert the header fragment audio
                           "-y", audio_file],
