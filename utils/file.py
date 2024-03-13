@@ -4,7 +4,7 @@ import typing
 import pathlib
 import smbclient
 import platform
-
+import subprocess
 
 from utils.config import CONFIG, Target
 
@@ -24,11 +24,13 @@ def is_pre_translated(video_file_name: str) -> bool:
         return True
 
 
-def subtitle_embedded() -> bool:
+def subtitle_embedded(video_file: str) -> bool:
     """
     use mediainfo or ffmpeg check video file have subtitle stream
+    ffmpeg -hide_banner -i test.mkv -c copy -map 0:s:0 -frames:s 1 -f null - -v 0;echo $?
     """
-    pass
+    cmd = f"{CONFIG.FFmpeg.binary_path} -hide_banner -i test.mkv -c copy -map 0:s:0 -frames:s 1 -f null - -v 0"
+    status, data = subprocess.getstatusoutput(cmd)
 
 
 def need_translation(video_file_name: str) -> bool:
