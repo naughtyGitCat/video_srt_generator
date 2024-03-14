@@ -28,6 +28,7 @@ def subtitle_embedded(video_file: str) -> bool:
     """
     use mediainfo or ffmpeg check video file have subtitle stream
     ffmpeg -hide_banner -i test.mkv -c copy -map 0:s:0 -frames:s 1 -f null - -v 0;echo $?
+    https://stackoverflow.com/questions/43005432/check-if-a-video-file-has-subtitles
     """
     cmd = f"{CONFIG.FFmpeg.binary_path} -hide_banner -i test.mkv -c copy -map 0:s:0 -frames:s 1 -f null - -v 0"
     status, data = subprocess.getstatusoutput(cmd)
