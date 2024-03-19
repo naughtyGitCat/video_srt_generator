@@ -1,5 +1,5 @@
 # 20230906
-#
+# write subtitle generate history
 from __future__ import annotations
 
 import logging
