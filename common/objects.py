@@ -15,3 +15,11 @@ class ShareObjects:
     current_status: str
     current_srt: str
     current_audio: str
+
+    @classmethod
+    def reset_current(cls):
+        cls.current_status = ""
+        cls.current_srt = ""
+        cls.current_audio = ""
+
+

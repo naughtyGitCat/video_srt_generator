@@ -40,7 +40,7 @@ def init():
 def handle_exit(sig_num: int, frame: typing.Optional[types.FrameType]) -> None:
     logger.info(f"received signum: {sig_num}, frame: {frame}")
     if ShareObjects.current_status == "transcribe":
-        if ShareObjects.current_srt != "":
+        if ShareObjects.current_srt != "" and ShareObjects.current_srt.endswith(".srt"):
             logger.info(f"now clean srt file {ShareObjects.current_srt}")
             remove_file(ShareObjects.current_srt)
         if ShareObjects.current_audio != "":
@@ -87,25 +87,24 @@ def main():
                     recorder.insert(video_file)
                     try:
                         ShareObjects.current_status = "video2audio"
-                        ShareObjects.current_audio = video_file
                         recorder.update_status(video_file, "video2audio", "ffmpeg")
-                        audio_file = video2audio.video2audio(video_file)
+                        ShareObjects.current_audio = video2audio.video2audio(video_file)
                     except Exception as e:
                         logger.warning(e)
                         recorder.update_status(video_file, "failed", traceback.format_exc())
+                        ShareObjects.reset_current()
                         continue
 
                     try:
-                        logger.info(f'now transcribe {audio_file}')
+                        logger.info(f'now transcribe {ShareObjects.current_audio}')
 
-                        srt_path = get_srt_filepath(video_file)
+                        ShareObjects.current_srt = get_srt_filepath(video_file)
                         ShareObjects.current_status = "transcribe"
-                        ShareObjects.current_srt = srt_path
                         recorder.update_status(video_file, "transcribe")
-                        writer = srt_writer.SRTWriter(srt_path)
+                        writer = srt_writer.SRTWriter(ShareObjects.current_srt)
 
                         ts = datetime.datetime.now()
-                        segments, info = model.transcribe(audio_file, language=target.language,
+                        segments, info = model.transcribe(ShareObjects.current_audio, language=target.language,
                                                           condition_on_previous_text=True,
                                                           vad_filter=False, suppress_blank=False,
                                                           max_initial_timestamp=88888,
@@ -116,23 +115,26 @@ def main():
                             "transcribe",
                             f"language: {info.language}, {info.language_probability * 100:.2f}%, duration: {info.duration}s")
                         if CONFIG.Translate.enable is True and CONFIG.Translate.sync is False:
-                            translation_record.insert(srt_path)
+                            translation_record.insert(ShareObjects.current_srt)
                         for segment in segments:
                             logger.debug(f"{video_file} segment: {segment}")
                             writer.segment_to_srt1(segment)
                             recorder.update_progress(video_file, segment.start/info.duration)
-                        logger.info(f'srt file path: {srt_path}')
-                        logger.info(f'srt file for {video_file} generated')
+                        logger.info(f'srt file for {video_file} generated, {ShareObjects.current_srt}')
+
+                        # calc time cost
                         te = datetime.datetime.now()
                         logger.debug(f"transcribe and translate to srt cost: {(te - ts).total_seconds()} seconds")
                         recorder.update_status(
                             video_file,
                             "success", f"elapse: {(te - ts).total_seconds()}s, total: {info.duration}s")
-                        logger.info(f"now delete tmp audio file {audio_file}")
-                        remove_file(audio_file)
-                        ShareObjects.current_status = "next"
-                        ShareObjects.current_srt = ""
-                        ShareObjects.current_audio = ""
+
+                        # clean temp audio file
+                        logger.info(f"now delete tmp audio file {ShareObjects.current_audio}")
+                        remove_file(ShareObjects.current_audio)
+
+                        # reset status
+                        ShareObjects.reset_current()
                     except Exception as e:
                         logger.warning(e)
                         recorder.update_status(video_file, "failed", traceback.format_exc())
