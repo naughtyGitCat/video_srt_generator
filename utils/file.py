@@ -1,11 +1,9 @@
 # 20230618
 import os
 import typing
-import config
+from utils import config
 import smbclient
 import platform
-from smbclient import SMBDirEntry
-
 
 
 def get_file_name(path: str) -> str:

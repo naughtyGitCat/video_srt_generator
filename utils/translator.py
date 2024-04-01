@@ -1,7 +1,7 @@
 # 20230619
 import traceback
 import translators
-import config
+from utils import config
 
 
 def translate(line: str, source_lang: str = 'auto', target_lang: str = config.Config.translate_to) -> str:

@@ -1,11 +1,9 @@
 import datetime
 import pathlib
-import pprint
 
 import whisper
-import config
-from utils.file import get_files, remove_file
-from utils import srt_writer, video2audio, transcriber
+from utils.file import get_files
+from utils import srt_writer, video2audio, transcriber, config
 
 
 def get_srt_filepath(video_file_fullpath: str) -> str:
