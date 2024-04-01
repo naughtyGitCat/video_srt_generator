@@ -5,11 +5,11 @@ import translators
 from utils import config
 
 
-def translate(line: str, source_lang: str = 'auto', target_lang: str = CONFIG.Translate.target_language) -> str:
+def translate(line: str, source_lang: str = 'auto', target_lang: str = config.CONFIG.Translate.target_language) -> str:
     result = config.CONFIG.Translate.fail_hint
     try:
         result = translators.translate_text(line,
-                                            translator=CONFIG.Translate.api,
+                                            translator=config.CONFIG.Translate.api,
                                             from_language=source_lang,
                                             to_language=target_lang)
         if isinstance(result, str):
