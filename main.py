@@ -50,5 +50,4 @@ if __name__ == '__main__':
         print(f'srt file path: {srt_path}')
         print(f'srt file for {video_file} generated')
         te = datetime.datetime.now()
-        print(f"[DEBUG] {(te-ts).total_seconds()}")
-        break
+        print(f"[DEBUG] transcribe and translate to srt cost: {(te-ts).total_seconds()} seconds")
