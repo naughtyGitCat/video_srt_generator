@@ -114,4 +114,4 @@ class Config:
             # return cls()
 
 
-CONFIG: typing.Optional[Config] = Config()
+CONFIG: typing.Optional[Config] = Config.init_config()
