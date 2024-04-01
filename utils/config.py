@@ -52,18 +52,19 @@ class Srt:
 
 @dataclasses.dataclass
 class Config1:
+
     # media_path = r"\\B350m\e\电影\纪录片\国家地理.伟大工程巡礼系列National.Geographic.Megastructures.720p.HDTV"
     Targets: list[Target]
 
-    FFmpeg: FFmpeg
+    FFmpeg: typing.Optional[FFmpeg]
 
-    Whisper: Whisper
+    Whisper: typing.Optional[Whisper]
 
-    Translate: Translate
+    Translate: typing.Optional[Translate]
 
-    Srt: Srt
+    Srt: typing.Optional[Srt]
 
-    Log: Log
+    Log: typing.Optional[Log]
 
 
 def init_config():
@@ -101,4 +102,9 @@ def init_config():
                    Srt=srt_config, Log=log_config)
 
 
-CONFIG: typing.Optional[Config1] = None
+CONFIG: typing.Optional[Config1] = Config1(Targets=list(),
+                                           FFmpeg=None,
+                                           Whisper=None,
+                                           Translate=None,
+                                           Srt=None,
+                                           Log=None)
