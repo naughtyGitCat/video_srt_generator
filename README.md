@@ -12,6 +12,7 @@ please customize you setting in `config.toml`
 *tested on debian12 + python3.11 + (smb mounted as cifs) media*
 
 **please mount smb share by cifs as a local path, and add the mounted path as `local` in `config.toml`**
+
 请将smb共享挂载到linux的目录上, 在配置文件中以local的类型设置
 
 ### windows
@@ -19,6 +20,7 @@ please customize you setting in `config.toml`
 
 **please provide the smb share user/pass in `config.toml` if the user/pass is not stored in windows,**
 **or  is running in remote pwsh connection， even if the share user/pass is set/stored in gui**
+
 如果系统中没有保存文件的共享账户密码,请在配置文件中提供。如果时同pwsh远程连接执行的本脚本，虽然系统已经保存了共享账户密码，但仍需要在配置文件中提供
 
 ```bash
@@ -38,19 +40,23 @@ python --version >= 3.11
 
 ### ffmpeg
 better to use `ffmpeg-full` than `ffmpeg`
+
 推荐使用ffmpeg-full版本
 
 you can download from https://www.ffmpeg.org/download.html
 or use following command
 ```bat
-# on Windows using Chocolatey (https://chocolatey.org/)
+# on Windows using Chocolatey (https://chocolatey.org/) or wget
 choco install ffmpeg
+wget install ffmpeg
+```
+
+```shell
+apt install ffmpeg
+dnf install ffmpeg
 ```
 
 ### openai-whisper
-```commandline
-pip install -U openai-whisper
-```
 #### language model, GPU, speed 模型与GPU显存和速度
 
 during cut a 1min10s video and transcribe to audio
