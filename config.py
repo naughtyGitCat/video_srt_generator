@@ -16,12 +16,12 @@ class Config:
 
     # for more detail, please read github.com/openai/whisper/__init__.py,transcribe.py
     whisper_model_path = r"E:\wisper\models"  # where to find the models, where to place the models when download
-    whisper_model_name = "medium"  # tiny[.en], small[.en], medium[.en], large. for detail, please read README.md
+    whisper_model_name = "medium"  # tiny[.en], small[.en], medium[.en], large_v2. for detail, please read README.md
     whisper_model_device = None  # cuda,cpu,None(without quotes). use None to let whisper auto choose cuda or cpu
 
     translate = True
     translate_to = "zh"
-    translate_api = ["bing", "VolcEngine", "Sogou", "Baidu", "Iflytek"]  # https://github.com/UlionTse/translators
+    translate_api = ["google", "bing", "Sogou", "Baidu", "Iflytek"]  # https://github.com/UlionTse/translators
     translate_fail_action = ""  # use '' or 'translation failed'
 
     srt_overwrite = True  # overwrite the existence srt
