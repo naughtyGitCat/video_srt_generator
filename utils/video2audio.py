@@ -1,7 +1,8 @@
 # psyduck 20230618
 import subprocess
-from utils import config
+from utils.config import CONFIG
 from utils.file import (get_file_name, get_path_parent, join_path)
+
 
 def video2audio(video_file: str) -> str:
     """
@@ -10,15 +11,15 @@ def video2audio(video_file: str) -> str:
     :return:
     """
     print(f'[DEBUG]now video2audio {video_file}')
-    if config.Config.audio_tmp_path == "":
+    if CONFIG.FFmpeg.tmp_path == "":
         _audio_tmp_path = get_path_parent(video_file)
     else:
-        _audio_tmp_path = config.Config.audio_tmp_path
+        _audio_tmp_path = CONFIG.FFmpeg.tmp_path
     video_file_name = get_file_name(video_file)
     print(f'[DEBUG]video_file_name {video_file_name}')
     audio_file = join_path(_audio_tmp_path, f"{video_file_name}.wisper.wav")
     print(f'[DEBUG]audio_file {audio_file}')
-    p = subprocess.Popen([config.Config.ffmpeg, "-i", video_file,
+    p = subprocess.Popen([CONFIG.FFmpeg.binary_path, "-i", video_file,
                           "-f", "wav", "-vn", "-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1",
                           # "-ss", "00:00:00", "-to", "00:01:10",  # for test, only convert the header fragment audio
                           "-y", audio_file],
