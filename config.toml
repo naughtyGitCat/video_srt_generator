@@ -1,0 +1,42 @@
+[log]
+level = "debug"
+count = 8
+size = 8  # mb
+
+[[targets]]
+path = "F:\\STARS-250"
+type = "local"
+suffixes = ["mp4", "mkv", "avi", "wmv"]
+search_recursive = true
+
+[[targets]]
+# remote access via pwsh to windows, run this project, sample 
+path = "\\\\B350m\\e\\电影\\纪录片\\国家地理.伟大工程巡礼系列National.Geographic.Megastructures.720p.HDTV"
+type = "smb"  # smb,local
+suffixes = ["mp4", "mkv", "avi", "wmv"]
+search_recursive = true
+# if smb:
+smb_user = ""
+smb_password = ""
+
+[ffmpeg]
+binary_path = "C:\\Program Files\\FFmpeg\\bin\\ffmpeg.exe"            # full path
+tmp_path = "F:\\audio_tmp"
+
+[whisper]
+# for more detail, please read github.com/openai/whisper/__init__.py,transcribe.py
+model_path = "E:\\wisper\\models"  # where to find the models, where to place the models when download
+model_name = "medium"  # tiny[.en], small[.en], medium[.en], large_v2  for detail, please read README.md
+model_device = ""  # cuda,cpu,""  use "" to let whisper auto choose cuda or cpu
+
+
+[translate]
+enable = true  # true,false
+target_language = "zh"
+api = ["google", "bing", "Sogou", "Baidu", "Iflytek"]  # https://github.com/UlionTse/translators
+fail_hint = ""  # "","translation failed"
+
+[srt]
+overwrite = true  # true,false overwrite the existence srt
+bilingual = true  # true,false translated words in first line, while the origin lying on second line
+
