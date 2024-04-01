@@ -45,6 +45,7 @@ class Target:
     suffixes: list[str]
     smb_user: str
     smb_password: str
+    search_recursive: bool
 
 
 @dataclasses.dataclass
@@ -109,7 +110,8 @@ def init_config() -> Config1:
     CONFIG.Targets = list()
     for t in data['log']['targets']:
         CONFIG.Targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
-                                     smb_user=t['smb_user'], smb_password=t['smb_password']))
+                                     smb_user=t['smb_user'], smb_password=t['smb_password'],
+                                     search_recursive=t['search_recursive']))
 
     CONFIG.FFmpeg = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
 
