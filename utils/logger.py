@@ -4,7 +4,7 @@ import logging
 import pathlib
 import coloredlogs
 from logging import handlers
-from utils.config import CONFIG
+from utils import CONFIG
 
 
 def get_logger(name) -> logging.Logger:
