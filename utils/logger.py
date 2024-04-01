@@ -13,8 +13,8 @@ def get_logger(name) -> logging.Logger:
     :param name: 日志文件名
     :return:
     """
-    log_dir = str(pathlib.Path(os.path.abspath(__file__)).parent.parent)
-    log_file = log_dir + '/' + name + '.log'
+    log_dir = pathlib.Path().joinpath("logs")
+    log_file = log_dir.joinpath(f"{name}.log")
     err_log_file = f"{log_dir}/error.log"
 
     if not os.path.exists(log_dir):
