@@ -9,8 +9,14 @@ import platform
 from utils.config import Target
 
 
-def have_src_file(video_file: str) -> bool:
-    pass
+def have_srt_file(video_file: str) -> bool:
+    path_object = pathlib.Path(video_file)
+    srt_name = path_object.name.split(path_object.suffix)[0] + ".srt"
+    srt_file = path_object.parent.joinpath(srt_name)
+    if video_file.startswith("\\"):
+        return smbclient.path.exists(srt_file)
+    else:
+        return os.path.exists(srt_file)
 
 
 def get_file_name(path: str) -> str:
