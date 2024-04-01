@@ -2,9 +2,11 @@
 import os
 import typing
 import pathlib
-from utils import config
 import smbclient
 import platform
+
+
+from utils.config import Target
 
 
 def get_file_name(path: str) -> str:
@@ -22,7 +24,7 @@ def get_path_parent(path: str) -> str:
         segments = path.split('\\')
         return "\\".join(segments[0:-2])
     else:
-        return pathlib.Path(path).parent
+        return str(pathlib.Path(path).parent)
 
 
 def join_path(seg1: str, seg2: str) -> str: 
@@ -33,46 +35,46 @@ def join_path(seg1: str, seg2: str) -> str:
         return os.path.join(seg1, seg2)
 
 
-def smb_login() -> None:
-    if config.Config.media_smb_user != "":
-        smbclient.ClientConfig(username=config.Config.media_smb_user, password=config.Config.media_smb_password)
+def smb_login(target: Target) -> None:
+    if target.smb_user != "":
+        smbclient.ClientConfig(username=target.smb_user, password=target.smb_password)
 
 
-def get_files(filepath: str, recursive: bool) -> typing.Iterable[str]:
-    if filepath.startswith('\\'):
-        return get_smb_file(filepath, recursive)
+def get_files(target: Target) -> typing.Iterable[str]:
+    if target.path.startswith('\\'):
+        return get_smb_file(target)
     else:
-        return get_local_file(filepath, recursive)
+        return get_local_file(target)
 
 
-def get_local_file(filepath: str, recursive: bool) -> typing.Iterable[str]:
-    entrypoints = os.scandir(filepath)
+def get_local_file(target: Target) -> typing.Iterable[str]:
+    entrypoints = os.scandir(target.path)
     for entrypoint in entrypoints:
-        if entrypoint.is_dir() and recursive:
-            r_files = get_local_file(entrypoint.path, recursive)
+        if entrypoint.is_dir() and target.search_recursive:
+            r_files = get_local_file(target)
             for file in r_files:
                 yield file
         if entrypoint.is_file():
-            for suffix in config.Config.media_suffix:
+            for suffix in target.suffixes:
                 if entrypoint.name.endswith(suffix):
                     yield entrypoint.path
 
 
-def get_smb_file(filepath: str, recursive: bool) -> typing.Iterable[any]:
-    smb_login()
-    for smb_entry in smbclient.scandir(filepath):
-        if smb_entry.is_dir() and recursive:
-            r_files = get_local_file(smb_entry.path, recursive)
+def get_smb_file(target: Target) -> typing.Iterable[any]:
+    if target.type == "smb":
+        smb_login(target)
+    for smb_entry in smbclient.scandir(target.path):
+        if smb_entry.is_dir() and target.search_recursive:
+            r_files = get_local_file(target)
             for file in r_files:
                 yield file
         if smb_entry.is_file():
-            for suffix in config.Config.media_suffix:
+            for suffix in target.suffixes:
                 if smb_entry.name.endswith(suffix):
                     yield smb_entry.path
 
 
 def remove_file(filepath: str):
-    smb_login()
     if filepath.startswith('\\'):
         smbclient.remove(filepath)
     else:
@@ -84,6 +86,6 @@ def create_file(filepath: str):
 
 
 if __name__ == "__main__":
-    files = get_local_file(r"E:\Something\英雄时刻\516160507", False)
+    files = get_local_file(Target(path=r"E:\Something\英雄时刻", suffixes=["mp4"], type="local", search_recursive=True))
     for f in files:
         print(f)
