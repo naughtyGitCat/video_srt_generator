@@ -5,7 +5,11 @@ import sys
 import time
 from typing import TextIO
 
-from utils import translator, config
+from utils import translator
+from utils.config import CONFIG
+from utils.logger import get_logger
+
+logger = get_logger("srt")
 
 system_encoding = sys.getdefaultencoding()
 
@@ -113,9 +117,9 @@ class WriteSRT(SubtitlesWriter):
     def write_result(self, result: dict, file: TextIO):
         for i, (start, end, text) in enumerate(self.iterate_result(result), start=1):
             # if choose do translate
-            if config.Config.translate:
+            if CONFIG.Translate.enable:
                 translated_text = translator.translate(text)
-                if config.Config.srt_bilingual:
+                if CONFIG.Srt.bilingual:
                     # generate bilingual text
                     translated_text = f"{text}\n{translated_text}"
                 text = translated_text
@@ -153,11 +157,10 @@ class SRTWriter:
             segment_start = self.format_timestamp(segment["start"])
             segment_end = self.format_timestamp(segment["end"])
             segment_text = segment["text"].strip().replace("-->", "->")
-            if config.Config.translate:
+            if CONFIG.Translate.enable:
                 translated_text = translator.translate(segment_text)
-                if config.Config.verbose:
-                    print(f"{segment_start} --> {segment_end} {translated_text}")
-                if config.Config.srt_bilingual:
+                logger.debug(f"{segment_start} --> {segment_end} {translated_text}")
+                if CONFIG.Srt.bilingual:
                     # generate bilingual text
                     translated_text = f"{segment_text}\n{translated_text}"
                 segment_text = translated_text
@@ -169,11 +172,10 @@ class SRTWriter:
         segment_start = self.format_timestamp(segment["start"])
         segment_end = self.format_timestamp(segment["end"])
         segment_text = segment["text"].strip().replace("-->", "->")
-        if config.Config.translate:
+        if CONFIG.Translate.enable:
             translated_text = translator.translate(segment_text)
-            if config.Config.verbose:
-                print(f"{segment_start} --> {segment_end} {translated_text}")
-            if config.Config.srt_bilingual:
+            logger.debug(f"{segment_start} --> {segment_end} {translated_text}")
+            if CONFIG.Srt.bilingual:
                 # generate bilingual text
                 translated_text = f"{segment_text}\n{translated_text}"
             segment_text = translated_text
