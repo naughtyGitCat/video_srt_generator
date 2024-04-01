@@ -3,10 +3,8 @@ import logging
 import pathlib
 
 import whisper
-from utils import get_files
+from utils import CONFIG, get_files, get_logger
 from utils import srt_writer, video2audio, transcriber
-from utils import CONFIG
-from utils import get_logger
 
 logger = get_logger("main")
 
