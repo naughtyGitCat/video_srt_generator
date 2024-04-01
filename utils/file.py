@@ -9,6 +9,10 @@ import platform
 from utils.config import Target
 
 
+def have_src_file(video_file: str) -> bool:
+    pass
+
+
 def get_file_name(path: str) -> str:
     """optimized for smb/local file"""
     if platform.system() != 'Windows' and path.startswith("\\\\"):
