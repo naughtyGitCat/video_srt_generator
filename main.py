@@ -5,8 +5,8 @@ import pathlib
 import whisper
 from utils.file import get_files
 from utils import srt_writer, video2audio, transcriber
-from utils.config import CONFIG, init_config
-from utils.logger import get_logger
+from utils import CONFIG, init_config
+from utils import get_logger
 
 logger = get_logger("main")
 
