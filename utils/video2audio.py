@@ -1,9 +1,6 @@
 # psyduck 20230618
-import os.path
-import pathlib
 import subprocess
-import platform
-import config
+from utils import config
 from utils.file import (get_file_name, get_path_parent, join_path)
 
 def video2audio(video_file: str) -> str:
