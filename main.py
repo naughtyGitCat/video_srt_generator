@@ -33,11 +33,6 @@ if __name__ == '__main__':
 
             logger.info(f'now transcribe {audio_file}')
             srt_path = get_srt_filepath(video_file)
-            # result = model.transcribe(audio_file, language=None, verbose=config.Config.verbose)
-            # print(f'[DEBUG] {pprint.pprint(result)}')
-            # remove_file(audio_file)
-            # writer = srt_writer.get_srt_writer(str(pathlib.Path(video_file).parent))
-            # writer(result, video_file)
 
             writer = srt_writer.SRTWriter(srt_path)
             ts = datetime.datetime.now()
