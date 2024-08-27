@@ -97,8 +97,8 @@ class Config:
             targets: list[Target] = list()
             for t in data['targets']:
                 targets.append(Target(path=t['path'], type=t['type'], suffixes=t['suffixes'],
-                                      smb_user=t['smb_user'], smb_password=t['smb_password'],
-                                      search_recursive=t['search_recursive'], language=t.get('language', 'auto')))
+                                      smb_user=t.get('smb_user', None), smb_password=t.get('smb_password', None),
+                                      search_recursive=t.get('search_recursive', True), language=t.get('language', 'auto')))
 
             ffmpeg_config = FFmpeg(binary_path=data['ffmpeg']['binary_path'], tmp_path=data['ffmpeg']['tmp_path'])
 
